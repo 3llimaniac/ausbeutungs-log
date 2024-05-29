@@ -2,3 +2,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .al-login-input {
+        @apply rounded-md border-b-2 text-base text-white placeholder-gray-300 bg-neutral-500 border-neutral-500 w-full p-3  focus:border-gray-300;
+    }
+}
+
+*:focus {
+    outline: none;
+}
