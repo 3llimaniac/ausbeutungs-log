@@ -20,16 +20,47 @@ export const authState = ref({
 
 export function setAccessToken(accessToken: string, user: User) {
     authState.value.accessToken = accessToken;
-    authState.value.user = user;    
+    authState.value.user = user;
+}
+
+export async function storeUserData() {
+    const fetchResult = await fetch("http://localhost:3000/api/user", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    });
+
+    if (!fetchResult.ok) {
+        throw "User not found";
+    }
+
+    authState.value.user = await fetchResult.json();
+    console.log(authState.value.user);
 }
 
 export function isLoggedIn(): Boolean {
-    console.log("Accesstoken: " + authState.value.accessToken);    
+    console.log("Cookies");
+    console.log(document.cookie);
     return authState.value.accessToken != '';
-
 }
 
-export function clearAuthData() {
+export async function clearAuthData() {
+    const fetchResult = await fetch("http://localhost:3000/api/user/logout", {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    });
+
+    if (!fetchResult.ok) {
+        throw "User cannot be logged out";
+    }
+
     authState.value.accessToken = '';
     authState.value.user = {
         id: '',
@@ -37,5 +68,6 @@ export function clearAuthData() {
         lastname: '',
         username: '',
     };
+    
     authState.value.loginError = null
 }

@@ -43,8 +43,9 @@ const errorMap: { [key: string]: ErrorMapEntry } = {
 };
 
 async function onSubmit() {
-    const fetchResult = await fetch("http://localhost:3000/api/users/" + (props.signUp ? "register" : "login"), {
+    const fetchResult = await fetch("http://localhost:3000/api/user/" + (props.signUp ? "register" : "login"), {
         method: "POST",
+        credentials: "include",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json"
@@ -56,10 +57,7 @@ async function onSubmit() {
 
     if (fetchResult.ok) {
         setAccessToken(fetchObject.accessToken, fetchObject.user);
-        console.log("Bin reingekommen");
-        router.push('/').catch(failure => {
-            console.log(failure);
-        })
+        router.push('/').catch(failure => { console.log(failure); })
     } else {
         checkErrors(fetchObject)
     }
