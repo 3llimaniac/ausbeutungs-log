@@ -8,7 +8,7 @@ import 'primeicons/primeicons.css'
       <i class="icon pi pi-angle-left" style="font-size: 2rem"></i>
     </div>
 
-    <div class="font-bold text-2xl">2024: 35/52</div>
+    <div class="font-bold text-2xl">25.10.24...30.10.24</div>
 
     <div class="hover:scale-110 active:scale-90 transition-transform ease-in-out">
       <i class="icon pi pi-angle-right" style="font-size: 2rem"></i>

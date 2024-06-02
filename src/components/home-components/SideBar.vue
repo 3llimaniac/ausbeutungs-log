@@ -33,7 +33,7 @@ function onLogOut() {
             </button>
 
             <button @click="onLogOut"
-                class="flex justify-left items-center text-left rounded w-full mx-3 p-3 bg-red-700 hover:bg-red-800 active:bg-red-900 transition-all">
+                class="flex justify-left items-center text-left rounded w-full mx-3 p-3 border-2 border-red-300 bg-red-500 hover:bg-red-700 active:bg-red-900 transition-all">
                 <i class="icon pi pi-sign-out pr-5" style="font-size: 1.6rem"></i>
 
                 Logout

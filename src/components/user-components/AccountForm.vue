@@ -127,7 +127,7 @@ async function checkErrors(fetchObject: ErrorObject) {
         <!-- Buttons -->
         <div class="w-full mb-3 flex align-center justify-center drop-shadow-md">
             <button
-                class="btn rounded text-white m-5 p-3 text-center bg-purple-400 hover:bg-purple-500 transition ease-in-out"
+                class="btn rounded text-white m-5 p-3 text-center border-2 border-purple-200 bg-purple-400 hover:bg-purple-500 transition ease-in-out"
                 type="submit">
                 {{ signUp ? 'Konto erstellen' : 'Login' }}
             </button>

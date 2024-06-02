@@ -13,11 +13,11 @@
     }
 
     .al-view-not-clicked {
-        @apply hover:bg-neutral-700 active:bg-neutral-900 transition-all
+        @apply hover:bg-neutral-700 active:bg-neutral-900 transition-all border-2 border-neutral-500
     }
 
     .al-view-clicked {
-        @apply bg-neutral-900
+        @apply bg-neutral-900 border-2 border-neutral-700
     }
 }
 
