@@ -3,8 +3,6 @@ import { ref } from 'vue';
 
 let entryDate = ref(new Date());
 console.log(entryDate.value);
-
-
 </script>
 
 <template>

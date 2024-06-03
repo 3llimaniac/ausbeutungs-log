@@ -1,10 +1,10 @@
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 interface User {
-    id: string
+    id: string;
     firstname: string;
     lastname: string;
-    username: string
+    username: string;
 }
 
 export const authState = ref({
@@ -38,12 +38,9 @@ export async function storeUserData() {
     }
 
     authState.value.user = await fetchResult.json();
-    console.log(authState.value.user);
 }
 
 export function isLoggedIn(): Boolean {
-    console.log("Cookies");
-    console.log(document.cookie);
     return authState.value.accessToken != '';
 }
 
@@ -68,6 +65,6 @@ export async function clearAuthData() {
         lastname: '',
         username: '',
     };
-    
-    authState.value.loginError = null
+
+    authState.value.loginError = null;
 }

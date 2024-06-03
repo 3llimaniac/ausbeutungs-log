@@ -18,22 +18,20 @@ function onLogOut() {
         <div class="w-full font-bold text-xl text-center text-white mt-3">{{ authState.user.username }}</div>
 
         <div class="w-full flex-grow flex flex-col justify-end items-center px-5 gap-5 py-20 text-white text-base">
-            <button
-                class="flex justify-left items-center text-left rounded w-full mx-3 p-3 bg-neutral-900 hover:bg-neutral-700 active:bg-neutral-500 transition-all">
+            <button class="al-side">
                 <i class="icon pi pi-file-import pr-5" style="font-size: 1.6rem"></i>
 
                 Daten importieren
             </button>
 
-            <button
-                class="flex justify-left items-center text-left rounded w-full mx-3 p-3 bg-neutral-900 hover:bg-neutral-700 active:bg-neutral-500 transition-all">
+            <button class="al-side">
                 <i class="icon pi pi-file-export pr-5" style="font-size: 1.6rem"></i>
 
                 Daten exportieren
             </button>
 
             <button @click="onLogOut"
-                class="flex justify-left items-center text-left rounded w-full mx-3 p-3 border-2 border-red-300 bg-red-500 hover:bg-red-700 active:bg-red-900 transition-all">
+                class="flex items-center text-left rounded w-full mx-3 p-3 border-2 border-red-300 bg-red-500 hover:bg-red-700 active:bg-red-900 transition-all">
                 <i class="icon pi pi-sign-out pr-5" style="font-size: 1.6rem"></i>
 
                 Logout
