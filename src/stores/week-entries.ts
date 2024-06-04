@@ -26,8 +26,15 @@ export const weekEntries = ref<Record<number, DayEntry>>({ ...initialWeekEntries
 
 export const weekNumber = ref(new Date().getWeek());
 
+export const yearNumber = ref(new Date().getFullYear());
+
 export async function updateWeekNumber(newNumber: number) {
     weekNumber.value = newNumber;
+    await updateWeekEntries();
+}
+
+export async function updateYearNumber(newNumber: number) {
+    yearNumber.value = newNumber;
     await updateWeekEntries();
 }
 
@@ -46,7 +53,7 @@ export async function updateWeekEntries() {
 
 async function getEntriesOfCurrentWeek() {
     let fetchUrl: string = 'http://localhost:3000/api/entry/week';
-    fetchUrl += `?weekNumber=${weekNumber.value}`;
+    fetchUrl += `?weekNumber=${weekNumber.value}&yearNumber=${yearNumber.value}`;
 
     const fetchResult = await fetch(fetchUrl, {
         method: 'GET',

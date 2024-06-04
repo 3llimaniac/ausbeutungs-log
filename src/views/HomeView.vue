@@ -33,17 +33,17 @@ onBeforeMount(async () => {
 <template>
   <EntryModal v-if="showModal" @close="showModal = false" />
 
-  <div class="grid grid-cols-7 h-full">
+  <div class="grid grid-cols-7 h-full overflow-hidden">
     <SideBar />
 
     <div class="flex justify-center col-span-6 items-center h-screen overflow-hidden bg-neutral-800">
       <div v-if="isLoading"
-        class="flex place-items-center justify-center align-center w-full h-full text-center text-white">
+        class="flex place-items-center justify-center align-center w-full h-full text-center text-white font-bold text-2xl">
         Data is loading...
       </div>
 
-      <div v-else class=" bg-neutral-800 h-5/6 mb-10 w-11/12">
-        <div class="flex text-lg justify-center text-center text-white gap-20">
+      <div v-else class=" bg-neutral-800 h-5/6 mb-10 w-10/12">
+        <div class="flex justify-center text-center text-white gap-20">
           <button @click="isWeekView = true" class="al-view"
             :class="[isWeekView ? 'al-view-clicked' : 'al-view-not-clicked']">Wochenansicht</button>
 

@@ -6,7 +6,7 @@ import DayEntryBox from './DayEntryBox.vue';
 <template>
   <div class="w-full h-full">
     <div
-      class="grid grid-cols-5 font-bold text-lg px-6 place-items-center rounded-t w-full h-16 border-t-2 border-x-2 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300">
+      class="grid grid-cols-5 font-bold text-base px-6 place-items-center rounded-t w-full py-4 border-t-2 border-x-2 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300">
       <div>Montag</div>
       <div>Dienstag</div>
       <div>Mittwoch</div>

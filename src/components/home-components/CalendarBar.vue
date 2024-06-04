@@ -10,7 +10,7 @@ import 'primeicons/primeicons.css'
       <i @click="() => updateWeekNumber(weekNumber - 1)" class="icon pi pi-angle-left" style="font-size: 2rem"></i>
     </div>
 
-    <div class="font-bold text-2xl">25.10.24...30.10.24</div>
+    <div class="font-bold text-xl">25.10.2024...30.10.2024</div>
 
     <div class="hover:scale-110 active:scale-90 transition-transform ease-in-out">
       <i @click="() => updateWeekNumber(weekNumber + 1)" class="icon pi pi-angle-right" style="font-size: 2rem"></i>
