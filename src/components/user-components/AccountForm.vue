@@ -93,7 +93,7 @@ async function checkErrors(fetchObject: ErrorObject) {
 <template>
     <form name="user-form" @submit.prevent="onSubmit" autocomplete="off"
         class="w-full rounded mx-auto px-5 bg-neutral-800">
-        <div class="w-full mx-auto text-center px-10 text-3xl text-white font-bold pt-10">
+        <div class="w-full mx-auto text-center px-10 text-2xl text-white font-bold pt-10">
             {{ signUp ? "Konto erstellen" : "Login" }}
         </div>
 
@@ -127,7 +127,7 @@ async function checkErrors(fetchObject: ErrorObject) {
         <!-- Buttons -->
         <div class="w-full mb-3 flex align-center justify-center drop-shadow-md">
             <button
-                class="btn rounded text-white m-5 p-3 text-center border-2 border-purple-200 bg-purple-400 hover:bg-purple-500 transition ease-in-out"
+                class="al-submit"
                 type="submit">
                 {{ signUp ? 'Konto erstellen' : 'Login' }}
             </button>

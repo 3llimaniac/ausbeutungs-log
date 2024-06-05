@@ -4,6 +4,8 @@ import { ref } from "vue";
 declare global {
     interface Date {
         getWeek(): number;
+
+        addDays(days: number): Date;
     }
 }
 
@@ -14,7 +16,13 @@ Date.prototype.getWeek = function (): number {
     return Math.ceil(dayOfYear / 7) - 1;
 };
 
-const initialWeekEntries = {
+Date.prototype.addDays = function (days: number) {
+    const date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+};
+
+const initialWeekEntriesObject = {
     0: {} as DayEntry,
     1: {} as DayEntry,
     2: {} as DayEntry,
@@ -22,11 +30,26 @@ const initialWeekEntries = {
     4: {} as DayEntry
 };
 
-export const weekEntries = ref<Record<number, DayEntry>>({ ...initialWeekEntries });
+export const weekEntries = ref<Record<number, DayEntry>>({ ...initialWeekEntriesObject });
 
 export const weekNumber = ref(new Date().getWeek());
 
 export const yearNumber = ref(new Date().getFullYear());
+
+function initializeWeekEntries() {
+    const initialWeekEntries: Record<number, DayEntry> = { ...initialWeekEntriesObject };
+    const currentDate = new Date();
+    
+    let initialDate = currentDate.addDays(-(currentDate.getDay() - 1));
+    initialDate = initialDate.addDays((weekNumber.value - initialDate.getWeek()) * 7);
+
+    for (let index: number = 0; index < 5; index++) {
+        initialWeekEntries[index].workDay = initialDate;
+        initialDate = initialDate.addDays(1);
+    }
+
+    return initialWeekEntries;
+}
 
 export async function updateWeekNumber(newNumber: number) {
     weekNumber.value = newNumber;
@@ -38,20 +61,20 @@ export async function updateYearNumber(newNumber: number) {
     await updateWeekEntries();
 }
 
-export async function updateWeekEntry(entry: DayEntry, index: number) {
+export function updateWeekEntry(entry: DayEntry, index: number) {
     weekEntries.value[index] = entry;
 }
 
 export async function updateWeekEntries() {
-    const fetchedEntries: EntryType[] = await getEntriesOfCurrentWeek();
-    weekEntries.value = { ...initialWeekEntries };
+    const fetchedEntries: EntryType[] = await getEntriesOfSelectedWeek();
+    weekEntries.value = initializeWeekEntries();
 
     for (const entry of fetchedEntries) {
         weekEntries.value[entry.dayOfWeek - 2] = DayEntry.createDayEntryByEntryObject(entry);
     }
 }
 
-async function getEntriesOfCurrentWeek() {
+async function getEntriesOfSelectedWeek() {
     let fetchUrl: string = 'http://localhost:3000/api/entry/week';
     fetchUrl += `?weekNumber=${weekNumber.value}&yearNumber=${yearNumber.value}`;
 
@@ -66,3 +89,4 @@ async function getEntriesOfCurrentWeek() {
 
     return await fetchResult.json();
 }
+

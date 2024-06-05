@@ -18,11 +18,11 @@ function onLogOut() {
             <div class="text-center w-full mt-10 text-white font-bold text-2xl">AusbeutungsLog</div>
 
             <div class="w-full m-auto flex justify-center text-center pt-10">
-                <i class="icon pi pi-user mx-auto text-white bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 p-4 rounded-full"
+                <i class="icon pi pi-user mx-auto text-white bg-gradient-to-r border-2 from-indigo-400 via-purple-400 to-pink-400 p-4 rounded-full"
                     style="font-size: 2rem"></i>
             </div>
 
-            <div class="w-full font-bold text-xl text-center text-white mt-3">{{ authState.user.username }}</div>
+            <div class="w-full font-bold text-lg text-center text-white mt-3">{{ authState.user.username }}</div>
         </div>
 
         <div class="select-none">
