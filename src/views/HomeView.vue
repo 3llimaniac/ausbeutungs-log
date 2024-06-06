@@ -59,3 +59,17 @@ onBeforeMount(async () => {
     </div>
   </div>
 </template>
+
+<style>
+.al-view {
+  @apply rounded bg-neutral-600 p-3 w-1/6
+}
+
+.al-view-not-clicked {
+  @apply hover:bg-neutral-700 active:bg-neutral-900 transition-all border-2 border-neutral-500
+}
+
+.al-view-clicked {
+  @apply bg-neutral-900 border-2 border-neutral-700
+}
+</style>

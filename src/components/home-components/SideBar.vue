@@ -91,4 +91,8 @@ function onLogOut() {
 .fade-leave-active {
     transition: 0.2s opacity ease;
 }
+
+.al-side {
+    @apply flex items-center text-left rounded w-full mx-3 p-3 bg-neutral-900 hover:bg-neutral-700 active:bg-neutral-500 transition-all
+}
 </style>

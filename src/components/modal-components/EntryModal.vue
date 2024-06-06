@@ -7,12 +7,13 @@ const isAttendant = ref(true);
 </script>
 
 <script lang="ts">
-    export const modalDayEntry = ref(weekEntries.value[0])
+export const modalDayEntry = ref(weekEntries.value[0]);
 </script>
 
 <template>
     <div @click="$emit('close')"
-        class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-90 bg-clip-padding" style="z-index: 9999;">
+        class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-90 bg-clip-padding"
+        style="z-index: 9999;">
         <div @click.stop
             class="flex flex-col rounded-lg max-h-screen w-full max-w-3xl mx-auto items-center justify-center bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 p-3 overflow-y-auto">
             <form name="logout-form" autocomplete="off" class="w-full rounded mx-auto px-5 bg-neutral-800">
@@ -34,7 +35,7 @@ const isAttendant = ref(true);
                         <i class="icon pi pi-calendar-plus mr-1" style="font-size: 1.0rem"></i>
                         Arbeitszeit
                     </button>
-                    
+
                     <button type="button" @click="isAttendant = false"
                         :class="[!isAttendant ? 'al-entry-modal-tab-clicked' : 'al-entry-modal-tab-not-clicked']">
                         <i class="icon pi pi-calendar-minus mr-1" style="font-size: 1.0rem"></i>
@@ -79,5 +80,13 @@ const isAttendant = ref(true);
 /* Ensure the inner modal is scrollable if it overflows */
 .max-h-screen {
     max-height: 100vh;
+}
+
+.al-entry-modal-tab-not-clicked {
+    @apply p-3 border-neutral-800 border-b-4 rounded-t hover:border-b-neutral-600 transition-all ease-in-out
+}
+
+.al-entry-modal-tab-clicked {
+    @apply p-3 border-b-gray-300 bg-neutral-600 rounded-t border-b-4 transition-all ease-in-out
 }
 </style>
