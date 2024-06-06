@@ -4,11 +4,9 @@ import CalendarBar from '../components/home-components/CalendarBar.vue';
 import CalendarBox from '../components/home-components/CalendarBox.vue';
 import SideBar from '../components/home-components/SideBar.vue';
 import { storeUserData, isLoggedIn } from '@/stores/auth';
-import EntryModal from '@/components/modal-components/EntryModal.vue';
 import { onBeforeMount, ref } from 'vue';
 import { updateWeekEntries } from '@/stores/week-entries';
 
-let showModal = ref(false);
 let isWeekView = ref(true);
 const isLoading = ref(true);
 
@@ -31,8 +29,6 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <EntryModal v-if="showModal" @close="showModal = false" />
-
   <div class="grid grid-cols-7 h-full overflow-hidden">
     <SideBar />
 
@@ -53,7 +49,7 @@ onBeforeMount(async () => {
 
         <div v-if="isWeekView" class="h-full">
           <CalendarBar />
-          <CalendarBox @showModal="showModal = true" />
+          <CalendarBox />
         </div>
 
         <div v-else class="text-white">

@@ -22,7 +22,7 @@ function onLogOut() {
                     style="font-size: 2rem"></i>
             </div>
 
-            <div class="w-full font-bold text-lg text-center text-white mt-3">{{ authState.user.username }}</div>
+            <div class="w-full font-bold text-xl text-center text-white mt-3">{{ authState.user.username }}</div>
         </div>
 
         <div class="select-none">

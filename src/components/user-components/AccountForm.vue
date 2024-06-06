@@ -93,7 +93,7 @@ async function checkErrors(fetchObject: ErrorObject) {
 <template>
     <form name="user-form" @submit.prevent="onSubmit" autocomplete="off"
         class="w-full rounded mx-auto px-5 bg-neutral-800">
-        <div class="w-full mx-auto text-center px-10 text-2xl text-white font-bold pt-10">
+        <div class="w-full mx-auto text-center px-10 text-3xl text-white font-bold pt-10">
             {{ signUp ? "Konto erstellen" : "Login" }}
         </div>
 
@@ -129,6 +129,8 @@ async function checkErrors(fetchObject: ErrorObject) {
             <button
                 class="al-submit"
                 type="submit">
+                <i v-if="!signUp" class="icon pi pi-sign-in" style="font-size: 1.0rem"></i>
+                <i v-else class="icon pi pi-user-plus" style="font-size: 1.0rem"></i>
                 {{ signUp ? 'Konto erstellen' : 'Login' }}
             </button>
         </div>
