@@ -13,7 +13,7 @@ function onAddEntryClick(dayEntry: DayEntry) {
   isModalShown.value = true;
   modalDayEntry.value = dayEntry;
   console.log(dayEntry);
-  
+
 }
 </script>
 
@@ -24,7 +24,7 @@ function onAddEntryClick(dayEntry: DayEntry) {
 
   <div class="w-full h-full">
     <div
-      class="grid grid-cols-5 font-bold text-base px-6 place-items-center rounded-t w-full py-4 border-t-2 border-x-2 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300">
+      class="grid grid-cols-5 place-items-center w-full px-6 py-4 font-bold text-black text-base rounded-t border-t-2 border-x-2 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300">
       <div>Montag</div>
       <div>Dienstag</div>
       <div>Mittwoch</div>
@@ -35,7 +35,8 @@ function onAddEntryClick(dayEntry: DayEntry) {
     <div
       class="rounded-b mb-3 px-3 pb-3 h-3/4 border-x-2 border-b-2 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 drop-shadow-lg">
       <div class="grid grid-cols-5 h-full border-2 bg-neutral-900 gap-10 p-10">
-        <DayEntryBox @showEntryModal="onAddEntryClick(entry)" v-for="(entry, index) in weekEntries" :key="index" :dayEntry="entry" />
+        <DayEntryBox @showEntryModal="onAddEntryClick(entry)" v-for="(entry, index) in weekEntries" :key="index"
+          :dayEntry="entry" />
       </div>
     </div>
   </div>
