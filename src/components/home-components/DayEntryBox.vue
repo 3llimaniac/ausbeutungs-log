@@ -21,7 +21,7 @@ const props = defineProps<{ dayEntry: DayEntry; }>();
           </div>
 
           <div class="al-box-text bg-pink-400">
-            <div class="text-left px-3 mb-5 w-full">Beginn:</div>
+            <div class="text-left px-3 mb-5 w-full">Beginn: </div>
             <div class="text-left px-3 w-full">{{ props.dayEntry.arrival.toString() }} Uhr</div>
           </div>
         </div>

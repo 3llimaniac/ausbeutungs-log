@@ -48,6 +48,7 @@ function initializeWeekEntries() {
         initialDate = initialDate.addDays(1);
     }
 
+    console.log(initialWeekEntries);
     return initialWeekEntries;
 }
 
@@ -72,6 +73,8 @@ export async function updateWeekEntries() {
     for (const entry of fetchedEntries) {
         weekEntries.value[entry.dayOfWeek - 2] = DayEntry.createDayEntryByEntryObject(entry);
     }
+
+    console.log(weekEntries.value);
 }
 
 async function getEntriesOfSelectedWeek() {

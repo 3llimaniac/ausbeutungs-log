@@ -12,8 +12,6 @@ export let isModalShown = ref(false);
 function onAddEntryClick(dayEntry: DayEntry) {
   isModalShown.value = true;
   modalDayEntry.value = dayEntry;
-  console.log(dayEntry);
-
 }
 </script>
 

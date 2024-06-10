@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { weekEntries } from '@/stores/week-entries';
-import { DayEntry } from '@/types/day-entry';
 import { ref } from 'vue';
 
 const isAttendant = ref(true);

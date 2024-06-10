@@ -9,7 +9,7 @@
     }
 
     .al-submit {
-        @apply btn rounded text-white m-5 p-3 text-center bg-purple-500 hover:bg-purple-400 border-2 border-purple-200 transition ease-in-out
+        @apply rounded text-white m-5 p-3 text-center bg-purple-500 hover:bg-purple-400 border-2 border-purple-200 transition ease-in-out
     }
 }
 
