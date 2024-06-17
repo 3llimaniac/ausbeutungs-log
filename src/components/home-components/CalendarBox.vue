@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { weekEntries } from '@/stores/week-entries';
 import DayEntryBox from './DayEntryBox.vue';
-import EntryModal, { modalDayEntry } from '../modal-components/EntryModal.vue';
+import EntryModal, { updateModalDayEntry } from '../modal-components/EntryModal.vue';
 import { ref } from 'vue';
 import type { DayEntry } from '@/types/day-entry';
 </script>
@@ -10,8 +10,8 @@ import type { DayEntry } from '@/types/day-entry';
 export let isModalShown = ref(false);
 
 function onAddEntryClick(dayEntry: DayEntry) {
+  updateModalDayEntry(dayEntry)
   isModalShown.value = true;
-  modalDayEntry.value = dayEntry;
 }
 </script>
 

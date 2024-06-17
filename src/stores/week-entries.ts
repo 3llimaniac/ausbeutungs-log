@@ -30,14 +30,15 @@ const initialWeekEntriesObject = {
     4: {} as DayEntry
 };
 
-export const weekEntries = ref<Record<number, DayEntry>>({ ...initialWeekEntriesObject });
+export const weekEntries = ref<Record<number, DayEntry>>(structuredClone(initialWeekEntriesObject));
 
 export const weekNumber = ref(new Date().getWeek());
 
 export const yearNumber = ref(new Date().getFullYear());
 
 function initializeWeekEntries() {
-    const initialWeekEntries: Record<number, DayEntry> = { ...initialWeekEntriesObject };
+    const initialWeekEntries: Record<number, DayEntry> = structuredClone(initialWeekEntriesObject);
+    initialWeekEntries[0].dayOfWeek = 5;
     const currentDate = new Date();
     
     let initialDate = currentDate.addDays(-(currentDate.getDay() - 1));
@@ -48,7 +49,6 @@ function initializeWeekEntries() {
         initialDate = initialDate.addDays(1);
     }
 
-    console.log(initialWeekEntries);
     return initialWeekEntries;
 }
 
@@ -73,8 +73,6 @@ export async function updateWeekEntries() {
     for (const entry of fetchedEntries) {
         weekEntries.value[entry.dayOfWeek - 2] = DayEntry.createDayEntryByEntryObject(entry);
     }
-
-    console.log(weekEntries.value);
 }
 
 async function getEntriesOfSelectedWeek() {
