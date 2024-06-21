@@ -1,34 +1,45 @@
 <script setup lang="ts">
 import { weekEntries } from '@/stores/week-entries'
 import type { DayEntry } from '@/types/day-entry'
-import { ref, defineEmits, watch, type Ref } from 'vue'
+import { ref, watch, type Ref, computed, type ComputedRef } from 'vue'
 
-const isAttendant = ref(true)
+const isAttendant: Ref<boolean> = ref(true)
 const emit = defineEmits(['close'])
 
 async function onSubmit() {
-  const entry: DayEntry = modalDayEntry.value
+  // Uncontrolled Call-By-Reference can be a fucking pain in the ass
+  let entry: DayEntry = {
+    workDay: modalDayEntry.value.workDay,
+    arrival: modalDayEntry.value.arrival,
+    departure: modalDayEntry.value.departure,
+    week: modalDayEntry.value.week,
+    dayOfWeek: modalDayEntry.value.dayOfWeek
+  }
+
   entry.arrival = inputArrival.value
   entry.departure = inputDeparture.value
 
   const response = await fetch('http://localhost:3000/api/entry', {
-    method: 'POST',
+    method: isEntryCreated.value ? 'PUT' : 'POST',
     credentials: 'include',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(modalDayEntry.value)
+    body: JSON.stringify(entry)
   })
 
   if (response.ok) {
     modalDayEntry.value.arrival = inputArrival.value
     modalDayEntry.value.departure = inputDeparture.value
     emit('close')
+  } else {
+    console.log(response)
   }
 }
 
-const isTimeValidFunction = (isArrival: Boolean) => {
+// i know it's fucking ugly, but it's still less ugly than redundance
+const timeValidationFunction = (isArrival: Boolean) => {
   const inputElement: Ref<string> = isArrival ? inputArrival : inputDeparture
 
   return async (newVal: string, oldVal: string) => {
@@ -47,53 +58,21 @@ const isTimeValidFunction = (isArrival: Boolean) => {
       }
     }
 
-    inputElement.value = oldVal;
+    inputElement.value = oldVal
   }
 }
 
-watch(inputDeparture, async (newVal: string, oldVal: string) => {
-  if (!newVal || !inputArrival.value) {
-    return
-  }
+watch(inputDeparture, timeValidationFunction(false))
 
-  const departureNumbers: number[] = newVal.split(':').map((e) => Number(e))
-  const arrivalNumbers: number[] = inputArrival.value.split(':').map((e) => Number(e))
-
-  if (Number(arrivalNumbers[0]) < Number(departureNumbers[0])) {
-    return
-  } else if (Number(arrivalNumbers[0]) == Number(departureNumbers[0])) {
-    if (Number(arrivalNumbers[1]) < Number(departureNumbers[1])) {
-      return
-    }
-  }
-
-  inputDeparture.value = oldVal
-})
-
-watch(inputArrival, async (newVal: string, oldVal: string) => {
-  if (!newVal || !inputDeparture.value) {
-    return
-  }
-
-  const arrivalNumbers: number[] = newVal.split(':').map((e) => Number(e))
-  const departureNumbers: number[] = inputDeparture.value.split(':').map((e) => Number(e))
-
-  if (Number(arrivalNumbers[0]) < Number(departureNumbers[0])) {
-    return
-  } else if (Number(arrivalNumbers[0]) == Number(departureNumbers[0])) {
-    if (Number(arrivalNumbers[1]) < Number(departureNumbers[1])) {
-      return
-    }
-  }
-
-  inputArrival.value = oldVal
-})
+watch(inputArrival, timeValidationFunction(true))
 </script>
 
 <script lang="ts">
-const modalDayEntry = ref(weekEntries.value[0])
-const inputArrival = ref(modalDayEntry.value.arrival)
-const inputDeparture = ref(modalDayEntry.value.departure)
+const modalDayEntry: Ref<DayEntry> = ref(weekEntries.value[0])
+const inputArrival: Ref<string> = ref(modalDayEntry.value.arrival)
+const inputDeparture: Ref<string> = ref(modalDayEntry.value.departure)
+
+const isEntryCreated: ComputedRef<boolean> = computed(() => !!(modalDayEntry.value.arrival || modalDayEntry.value.departure))
 
 export async function updateModalDayEntry(dayEntry: DayEntry) {
   modalDayEntry.value = dayEntry
@@ -145,14 +124,16 @@ export async function updateModalDayEntry(dayEntry: DayEntry) {
             <select class="al-login-input text-center">
               <option>Krank</option>
               <option>Urlaub</option>
+              <option>Termin</option>
+              <option>Sonstiges</option>
             </select>
           </div>
         </div>
 
         <div class="w-full mb-3 flex align-center justify-center drop-shadow-md">
           <button class="al-submit" type="submit">
-            <i class="icon pi pi-save" style="font-size: 1rem"></i>
-            Speichern
+            <i class="icon pi pi-save mr-1" style="font-size: 1rem"></i>
+            {{ isEntryCreated ? 'Speichern' : 'Erstellen' }}
           </button>
         </div>
       </form>

@@ -40,7 +40,7 @@ function initializeWeekEntries() {
     const initialWeekEntries: Record<number, DayEntry> = structuredClone(initialWeekEntriesObject);
     initialWeekEntries[0].dayOfWeek = 5;
     const currentDate = new Date();
-    
+
     let initialDate = currentDate.addDays(-(currentDate.getDay() - 1));
     initialDate = initialDate.addDays((weekNumber.value - initialDate.getWeek()) * 7);
 

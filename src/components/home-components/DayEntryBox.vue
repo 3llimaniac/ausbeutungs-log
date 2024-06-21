@@ -2,7 +2,7 @@
 import type { DayEntry } from '@/types/day-entry'
 import 'primeicons/primeicons.css'
 
-const emit = defineEmits(['showEntryModal'])
+defineEmits(['showEntryModal'])
 const props = defineProps<{ dayEntry: DayEntry }>()
 </script>
 
