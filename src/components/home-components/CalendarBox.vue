@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { weekEntries } from '@/stores/week-entries'
-import DayEntryBox from './DayEntryBox.vue'
+import DayEntryBox from '../entry-components/DayEntryBox.vue'
 import EntryModal, { updateModalDayEntry } from '../modal-components/EntryModal.vue'
 import { ref } from 'vue'
-import type { DayEntry } from '@/types/day-entry'
+import { AbsenceEntry, DayEntry } from '@/types/day-entry'
+import NoEntryBox from '../entry-components/NoEntryBox.vue'
+import AbsenceEntryBox from '../entry-components/AbsenceEntryBox.vue'
 </script>
 
 <script lang="ts">
@@ -31,7 +33,11 @@ function onAddEntryClick(dayEntry: DayEntry) {
 
     <div class="rounded-b mb-3 px-3 pb-3 h-3/4 border-x-2 border-b-2 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 drop-shadow-lg">
       <div class="grid grid-cols-5 h-full border-2 bg-neutral-900 gap-10 p-10">
-        <DayEntryBox @showEntryModal="onAddEntryClick(entry)" v-for="(entry, index) in weekEntries" :key="index" :dayEntry="entry" />
+        <template v-for="(entry, index) in weekEntries" :key="index">
+          <DayEntryBox v-if="DayEntry.isDayEntry(entry)" @showEntryModal="onAddEntryClick(entry as DayEntry)" :entry="entry as DayEntry" />
+          <AbsenceEntryBox v-else-if="AbsenceEntry.isAbsenceEntry(entry)" :entry="entry as AbsenceEntry" />
+          <NoEntryBox v-else @showEntryModal="onAddEntryClick(entry as DayEntry)" />
+        </template>
       </div>
     </div>
   </div>

@@ -12,8 +12,6 @@ async function onSubmit() {
     workDay: modalDayEntry.value.workDay,
     arrival: modalDayEntry.value.arrival,
     departure: modalDayEntry.value.departure,
-    week: modalDayEntry.value.week,
-    dayOfWeek: modalDayEntry.value.dayOfWeek
   }
 
   entry.arrival = inputArrival.value
@@ -68,7 +66,7 @@ watch(inputArrival, timeValidationFunction(true))
 </script>
 
 <script lang="ts">
-const modalDayEntry: Ref<DayEntry> = ref(weekEntries.value[0])
+const modalDayEntry: Ref<DayEntry> = ref(weekEntries.value[0] as DayEntry)
 const inputArrival: Ref<string> = ref(modalDayEntry.value.arrival)
 const inputDeparture: Ref<string> = ref(modalDayEntry.value.departure)
 
