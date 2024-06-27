@@ -1,4 +1,4 @@
-enum Reason {
+export enum Reason {
     Krankheit = 'Krankheit',
     Urlaub = 'Urlaub',
     Termin = 'Termin',

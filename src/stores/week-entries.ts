@@ -61,8 +61,8 @@ export async function updateYearNumber(newNumber: number) {
     await updateWeekEntries();
 }
 
-export function updateWeekEntry(entry: DayEntry, index: number) {
-    weekEntries.value[index] = entry;
+export function updateWeekEntry(entry: Entry) {
+    weekEntries.value[entry.workDay.getDay() - 1] = entry;
 }
 
 export async function updateWeekEntries() {
@@ -71,12 +71,12 @@ export async function updateWeekEntries() {
 
     for (const obj of fetchedEntries) {
         let entry: Entry = Entry.createEntryByObject(obj);
-        
+
         if ("arrival" in obj) {
             entry = DayEntry.createDayEntryByObject(obj);
         } else if ("reason" in obj) {
-            entry = AbsenceEntry.createAbsenceEntryByObject(obj)
-        } 
+            entry = AbsenceEntry.createAbsenceEntryByObject(obj);
+        }
 
         weekEntries.value[entry.workDay.getDay() - 1] = entry;
     }

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import type { AbsenceEntry } from '@/types/day-entry'
+import type { AbsenceEntry, Entry } from '@/types/day-entry'
 
 const props = defineProps<{ entry: AbsenceEntry }>()
+
 defineEmits(['showEntryModal'])
 </script>
 
@@ -12,10 +13,10 @@ defineEmits(['showEntryModal'])
         {{ props.entry.workDay.toLocaleDateString('de-DE') }}
       </div>
 
-      <div class="flex justify-center place-items-center text-center mx-auto w-full h-3/4  text-neutral-500">
+      <div class="flex justify-center place-items-center text-center mx-auto w-full h-3/4 text-neutral-400">
         <div class="grid grid-rows-2 gap-3">
           <i class="pi pi-ban" style="font-size: 1.5rem"></i>
-        {{ props.entry.reason }}
+          {{ props.entry.reason }}
         </div>
       </div>
     </div>
