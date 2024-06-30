@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DayEntry } from '@/types/day-entry'
+import { AbsenceEntry, DayEntry } from '@/types/day-entry'
 import { ref, watch, type Ref } from 'vue'
 import { isEntryCreated } from './EntryModal.vue'
 import { updateWeekEntries } from '@/stores/week-entries'
@@ -43,7 +43,20 @@ watch(inputDeparture, timeValidationFunction(false))
 watch(inputArrival, timeValidationFunction(true))
 
 async function onSubmit() {
-  let entry: DayEntry = {
+  // delete previous entry if it exists
+  if (props.entry instanceof AbsenceEntry) {
+    await fetch('http://localhost:3000/api/entry/absence', {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ workDay: props.entry.workDay })
+    })
+  }
+
+  const entry: DayEntry = {
     workDay: props.entry.workDay,
     arrival: props.entry.arrival,
     departure: props.entry.departure
@@ -53,7 +66,7 @@ async function onSubmit() {
   entry.departure = inputDeparture.value
 
   const response = await fetch('http://localhost:3000/api/entry', {
-    method: isEntryCreated.value ? 'PUT' : 'POST',
+    method: isEntryCreated.value && !(props.entry instanceof AbsenceEntry) ? 'PUT' : 'POST',
     credentials: 'include',
     headers: {
       Accept: 'application/json',
@@ -62,6 +75,7 @@ async function onSubmit() {
     body: JSON.stringify(entry)
   })
 
+  // update UI
   if (response.ok) {
     await updateWeekEntries()
     emit('close')
@@ -91,3 +105,5 @@ async function onSubmit() {
     </div>
   </form>
 </template>
+
+<style></style>

@@ -45,22 +45,3 @@ const props = defineProps<{ entry: DayEntry }>()
     </div>
   </div>
 </template>
-
-<!-- <style>
-.al-box-bubble {
-  /* @apply flex place-content-stretch place-items-center */
-  @apply grid grid-cols-6 place-items-stretch justify-center rounded w-full border-2;
-}
-
-.al-box-icon {
-  @apply flex text-center place-items-center justify-center;
-}
-
-.al-box-text {
-  @apply col-span-5 flex flex-col text-center place-items-center justify-center;
-}
-
-.al-icon {
-  @apply flex p-3 place-content-center rounded text-neutral-500 bg-neutral-800 border-2 border-neutral-700 hover:text-neutral-400 hover:bg-neutral-700 active:scale-95 transition ease-in-out;
-}
-</style> -->

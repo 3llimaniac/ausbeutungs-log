@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AbsenceEntry, DayEntry, Entry, Reason } from '@/types/day-entry'
+import { AbsenceEntry, DayEntry, Reason } from '@/types/day-entry'
 import { ref, type Ref } from 'vue'
 import { isEntryCreated } from './EntryModal.vue'
 import { updateWeekEntries } from '@/stores/week-entries'
@@ -12,8 +12,17 @@ console.log(props.entry instanceof AbsenceEntry)
 console.log(props.entry instanceof DayEntry)
 
 async function onSubmit() {
+  // delete previous entry if it exists
   if (props.entry instanceof DayEntry) {
-    // delete previous entry
+    await fetch('http://localhost:3000/api/entry', {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ workDay: props.entry.workDay })
+    })
   }
 
   const entry: AbsenceEntry = {
@@ -22,10 +31,9 @@ async function onSubmit() {
   }
 
   entry.reason = currSelection.value as Reason
-  console.log(entry)
 
   const response = await fetch('http://localhost:3000/api/entry/absence', {
-    method: isEntryCreated.value ? 'PUT' : 'POST',
+    method: isEntryCreated.value && !(props.entry instanceof DayEntry) ? 'PUT' : 'POST',
     credentials: 'include',
     headers: {
       Accept: 'application/json',

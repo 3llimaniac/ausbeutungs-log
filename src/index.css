@@ -5,11 +5,11 @@
 
 @layer components {
   .al-login-input {
-    @apply rounded-md border-b-2 text-base text-white placeholder-gray-300 bg-neutral-500 border-neutral-500 w-full p-3  focus:border-gray-300;
+    @apply rounded-md border-b-2 text-base text-white placeholder-gray-300 bg-neutral-500 border-neutral-500 w-full p-3 focus:border-gray-300;
   }
 
   .al-submit {
-    @apply rounded text-white m-5 p-3 text-center bg-purple-500 hover:bg-purple-400 border-2 border-purple-200 transition ease-in-out;
+    @apply rounded text-white m-5 p-3 text-center bg-gradient-to-t from-purple-600 to-purple-500 hover:bg-gradient-to-b border-2 border-purple-400 transition-all ease-in-out;
   }
 
   .al-box-bubble {

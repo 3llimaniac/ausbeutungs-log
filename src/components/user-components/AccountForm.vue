@@ -129,8 +129,8 @@ async function checkErrors(fetchObject: ErrorObject) {
             <button
                 class="al-submit"
                 type="submit">
-                <i v-if="!signUp" class="icon pi pi-sign-in" style="font-size: 1.0rem"></i>
-                <i v-else class="icon pi pi-user-plus" style="font-size: 1.0rem"></i>
+                <i v-if="!signUp" class="icon pi pi-sign-in mr-2" style="font-size: 1.0rem"></i>
+                <i v-else class="icon pi pi-user-plus mr-2" style="font-size: 1.0rem"></i>
                 {{ signUp ? 'Konto erstellen' : 'Login' }}
             </button>
         </div>

@@ -7,7 +7,7 @@ import AbsenceEntryForm from './AbsenceEntryForm.vue'
 
 // first state of isAbsent
 const props = defineProps<{ isAbsent: boolean }>()
-const emit = defineEmits(['close'])
+defineEmits(['close'])
 
 const isAbsentLocal: Ref<boolean> = ref(props.isAbsent)
 </script>

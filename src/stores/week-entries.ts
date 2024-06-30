@@ -80,8 +80,6 @@ export async function updateWeekEntries() {
 
         weekEntries.value[entry.workDay.getDay() - 1] = entry;
     }
-
-    console.log(weekEntries.value);
 }
 
 async function getEntriesOfSelectedWeek() {
