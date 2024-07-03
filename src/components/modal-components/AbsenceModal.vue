@@ -1,12 +1,34 @@
 <script setup lang="ts">
+import { updateWeekEntries } from '@/stores/week-entries'
 import { Reason } from '@/types/day-entry'
 import { ref, type Ref } from 'vue'
 
-defineEmits(['close'])
+const emit = defineEmits(['close'])
 
 const currSelection: Ref<Reason> = ref(Reason.Krankheit)
 const inputBeginning: Ref<string> = ref(new Date().toISOString().split('T')[0])
 const inputEnding: Ref<string> = ref(new Date(Date.now() + 86400000).toISOString().split('T')[0]) // +1 day
+
+async function onSubmit() {
+  const response = await fetch('http://localhost:3000/api/entry/absences', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      firstDate: new Date(inputBeginning.value),
+      lastDate: new Date(inputEnding.value),
+      reason: currSelection.value
+    })
+  })
+
+  if (response) {
+    await updateWeekEntries()
+    emit('close')
+  }
+}
 </script>
 
 <template>
@@ -17,7 +39,7 @@ const inputEnding: Ref<string> = ref(new Date(Date.now() + 86400000).toISOString
 
         <div class="gap-5 rounded py-3 mx-10 mb-10 text-white text-center font-bold text-xl p-3 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 border-2 border-white">{{ new Date(inputBeginning).toLocaleDateString('de-DE') }}...{{ new Date(inputEnding).toLocaleDateString('de-DE') }}</div>
 
-        <form>
+        <form @submit.prevent="onSubmit" name="multiple-absences-form" autocomplete="off">
           <div class="mb-3 mx-auto px-10 pb-5 pt-0 gap-3 w-full">
             <div class="text-center text-white mb-3">Grund</div>
 

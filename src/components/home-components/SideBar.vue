@@ -5,13 +5,13 @@ import { updateWeekNumber, updateYearNumber, weekNumber, yearNumber } from '@/st
 import { ref, type Ref } from 'vue'
 import AbsenceModal from '../modal-components/AbsenceModal.vue'
 
-const currentWeekGroup = ref(Math.floor(weekNumber.value / 13) + 1)
+const currentWeekGroup = ref(Math.floor(weekNumber.value / 13))
 
 const isAbsentModalShown: Ref<boolean> = ref(false)
 
 function onLogOut() {
   clearAuthData()
-  router.push('/login')
+  router.push('/login').catch(() => (window.location.href = '/'))
 }
 </script>
 
