@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import 'primeicons/primeicons.css'
 import { ref } from 'vue'
-import router from '@/router'
 import { setAccessToken } from '../../stores/auth.ts'
 const props = defineProps({ signUp: Boolean })
 
@@ -11,9 +10,13 @@ let invalidUsernameMessage = ref('Bitte geben Sie einen Benutzernamen ein')
 let invalidPassword = ref(false)
 let invalidPasswordMessage = ref('Bitte geben Sie ein Passwort ein')
 
+let invalidWeekHours = ref(false)
+let invalidWeekHoursMessage = ref('Bitte geben Sie ein Passwort ein')
+
 const formData = ref({
   username: '',
-  password: ''
+  password: '',
+  weekHours: 40
 })
 
 interface ErrorObject {
@@ -57,9 +60,7 @@ async function onSubmit() {
 
   if (fetchResult.ok) {
     setAccessToken(fetchObject.accessToken, fetchObject.user)
-    router.push('/').catch(() => {
-      window.location.href = '/'
-    })
+    window.location.href = '/'
   } else {
     checkErrors(fetchObject)
   }
@@ -75,6 +76,9 @@ async function checkErrors(fetchObject: ErrorObject) {
     } else if (error.invalidField === 'invalidPassword') {
       invalidPassword.value = true
       invalidPasswordMessage.value = error.message
+    } else if (error.invalidField === 'invalidWeekHours') {
+      invalidWeekHours.value = true
+      invalidWeekHoursMessage.value = error.message
     }
     return
   }
@@ -101,8 +105,9 @@ async function checkErrors(fetchObject: ErrorObject) {
     <div class="w-full px-10 mx-auto text-center font-light italic text-lg text-gray-300 pt-6">“Die Proletarier dieser Welt haben nichts zu verlieren als ihre Ketten. Sie haben eine Welt zu gewinnen. Proletarier aller Länder, vereinigt euch!”</div>
 
     <!-- Username -->
-    <div class="mb-3 mx-auto p-10 gap-3 w-full">
-      <input v-model="formData.username" id="username" class="al-login-input" :class="[invalidUsername ? 'border-3 border-red-400' : '']" placeholder="Benutzername" type="text" />
+    <div class="mb-3 mx-auto p-10 pb-5 gap-3 w-full">
+      <div class="text-center text-white mb-3">Benutzername</div>
+      <input v-model="formData.username" id="username" class="al-login-input" :class="[invalidUsername ? 'border-3 border-red-400' : '']" type="text" />
 
       <div v-if="invalidUsername" class="text-white mt-3">
         <i class="icon pi pi-exclamation-circle pr-1 text-red-400" style="font-size: 1rem"></i>
@@ -112,11 +117,23 @@ async function checkErrors(fetchObject: ErrorObject) {
 
     <!-- Password -->
     <div class="mb-3 px-10">
-      <input v-model="formData.password" id="password" class="al-login-input" :class="[invalidPassword ? 'border-3 border-red-400' : '']" placeholder="Kennwort" type="password" />
+      <div class="text-center text-white mb-3">Passwort</div>
+      <input v-model="formData.password" id="password" class="al-login-input" :class="[invalidPassword ? 'border-3 border-red-400' : '']" type="password" />
 
       <div v-if="invalidPassword" class="text-white mt-3">
         <i class="icon pi pi-exclamation-circle pr-1 text-red-400" style="font-size: 1rem"></i>
         {{ invalidPasswordMessage }}
+      </div>
+    </div>
+
+    <!-- Number -->
+    <div v-if="signUp" class="pt-5 mb-3 px-10">
+      <div class="text-center text-white mb-3">Anzahl der Wochenstunden</div>
+      <input v-model="formData.weekHours" type="number" placeholder="Anzahl der Wochenstunden" class="al-login-input" />
+
+      <div v-if="invalidWeekHours" class="text-white mt-3">
+        <i class="icon pi pi-exclamation-circle pr-1 text-red-400" style="font-size: 1rem"></i>
+        {{ invalidWeekHoursMessage }}
       </div>
     </div>
 

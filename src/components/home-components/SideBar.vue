@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { authState, clearAuthData } from '@/stores/auth'
 import router from '@/router'
-import { updateWeekNumber, updateYearNumber, weekNumber, yearNumber } from '@/stores/week-entries'
+import { updateWeekNumber, updateYearNumber, weekGroup, weekNumber, yearNumber } from '@/stores/week-entries'
 import { ref, type Ref } from 'vue'
 import AbsenceModal from '../modal-components/AbsenceModal.vue'
-
-const currentWeekGroup = ref(Math.floor(weekNumber.value / 13))
+import SettingModal from '../modal-components/SettingModal.vue'
 
 const isAbsentModalShown: Ref<boolean> = ref(false)
+
+const isSettingModalShown: Ref<boolean> = ref(false)
 
 function onLogOut() {
   clearAuthData()
@@ -21,12 +22,16 @@ function onLogOut() {
       <AbsenceModal @close="isAbsentModalShown = false" />
     </div>
 
+    <div v-if="isSettingModalShown" class="relative">
+      <SettingModal @close="isSettingModalShown = false" />
+    </div>
+
     <div>
       <div class="text-center w-full mt-10 text-white font-bold text-2xl">AusbeutungsLog</div>
 
-      <div class="w-full m-auto flex justify-center text-center pt-10">
-        <i class="icon pi pi-user mx-auto text-white bg-gradient-to-r border-2 from-indigo-400 via-purple-400 to-pink-400 p-4 rounded-full" style="font-size: 2rem"></i>
-      </div>
+      <button @click="isSettingModalShown = true" class="w-full m-auto flex justify-center text-center pt-10">
+        <i class="icon pi pi-user mx-auto text-white bg-gradient-to-r border-2 from-indigo-400 via-purple-400 to-pink-400 p-4 rounded-full hover:ring-4 hover:ring-neutral-700" style="font-size: 2rem"></i>
+      </button>
 
       <div class="w-full font-bold text-xl text-center text-white mt-3">{{ authState.user.username }}</div>
     </div>
@@ -45,20 +50,14 @@ function onLogOut() {
       </div>
 
       <div class="grid grid-cols-4 place-items-stretch gap-2 text-white mt-3 mx-10">
-        <div @click="currentWeekGroup = weekGroup" v-for="weekGroup in 4" :key="weekGroup" class="bg-neutral-800 rounded text-center p-2 border-2 hover:bg-neutral-600 active:bg-indigo-600 transition-all ease-in-out" :class="[currentWeekGroup == weekGroup ? 'border-indigo-400' : 'border-neutral-600']">
-          {{ weekGroup * 13 }}
+        <div @click="weekGroup = currWeekGroup" v-for="currWeekGroup in 4" :key="currWeekGroup" class="bg-neutral-800 rounded text-center p-2 border-2 hover:bg-neutral-600 active:bg-indigo-600 transition-all ease-in-out" :class="[weekGroup == currWeekGroup ? 'border-indigo-400' : 'border-neutral-600']">
+          {{ currWeekGroup * 13 }}
         </div>
       </div>
 
       <div class="grid grid-cols-4 place-items-stretch gap-2 text-white mt-10 mx-10">
-        <div
-          @click="() => updateWeekNumber(weekNumb + 13 * (currentWeekGroup - 1))"
-          v-for="weekNumb in 13"
-          :key="weekNumb"
-          class="bg-neutral-700 hover:bg-neutral-500 active:bg-pink-600 rounded text-center p-2 border-2 transition-all ease-in-out"
-          :class="[weekNumber == weekNumb + 13 * (currentWeekGroup - 1) ? 'border-pink-400' : 'border-neutral-500']"
-        >
-          {{ weekNumb + 13 * (currentWeekGroup - 1) }}
+        <div @click="() => updateWeekNumber(weekNumb + 13 * (weekGroup - 1))" v-for="weekNumb in 13" :key="weekNumb" class="bg-neutral-700 hover:bg-neutral-500 active:bg-pink-600 rounded text-center p-2 border-2 transition-all ease-in-out" :class="[weekNumber == weekNumb + 13 * (weekGroup - 1) ? 'border-pink-400' : 'border-neutral-500']">
+          {{ weekNumb + 13 * (weekGroup - 1) }}
         </div>
       </div>
     </div>

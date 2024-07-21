@@ -33,8 +33,8 @@ function onAddEntryClick(entry: Entry) {
       <div>Freitag</div>
     </div>
 
-    <div class="rounded-b mb-3 px-3 pb-3 h-3/4 border-x-2 border-b-2 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 drop-shadow-lg">
-      <div class="grid grid-cols-5 h-full border-2 bg-neutral-900 gap-10 p-10">
+    <div class="rounded-b px-3 pb-3 h-3/4 border-x-2 border-b-2 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 drop-shadow-lg">
+      <div class="grid grid-cols-5 h-full border-2 bg-neutral-900 gap-10 p-10 overflow-auto">
         <template v-for="(entry, index) in weekEntries" :key="index">
           <DayEntryBox v-if="DayEntry.isDayEntry(entry)" :entry="entry as DayEntry" @showEntryModal="onAddEntryClick(entry)" />
           <AbsenceEntryBox v-else-if="AbsenceEntry.isAbsenceEntry(entry)" :entry="entry as AbsenceEntry" @showEntryModal="onAddEntryClick(entry)" />

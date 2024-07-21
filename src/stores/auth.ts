@@ -5,6 +5,7 @@ interface User {
     firstname: string;
     lastname: string;
     username: string;
+    hours: number
 }
 
 export const authState = ref({
@@ -14,6 +15,7 @@ export const authState = ref({
         firstname: '',
         lastname: '',
         username: '',
+        hours: 40
     },
     loginError: null
 });
@@ -36,7 +38,7 @@ export async function storeUserData() {
     if (!fetchResult.ok) {
         throw "User not found";
     }
-
+    
     authState.value.user = await fetchResult.json();
 }
 
@@ -64,6 +66,7 @@ export async function clearAuthData() {
         firstname: '',
         lastname: '',
         username: '',
+        hours: 40
     };
 
     authState.value.loginError = null;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { weekEntries } from '@/stores/week-entries'
 import { AbsenceEntry, DayEntry, type Entry } from '@/types/day-entry'
-import { ref, type Ref, computed, type ComputedRef } from 'vue'
+import { ref, type Ref, computed, type ComputedRef, watch } from 'vue'
 import DayEntryForm from './DayEntryForm.vue'
 import AbsenceEntryForm from './AbsenceEntryForm.vue'
 
@@ -9,7 +9,15 @@ import AbsenceEntryForm from './AbsenceEntryForm.vue'
 const props = defineProps<{ isAbsent: boolean }>()
 defineEmits(['close'])
 
-const isAbsentLocal: Ref<boolean> = ref(props.isAbsent)
+let isAbsentLocal: Ref<boolean> = ref(props.isAbsent || modalDayEntry.value.workDay > new Date());
+
+watch(isAbsentLocal, (newVal: boolean, oldVal: boolean) => {
+  if (newVal || modalDayEntry.value.workDay > new Date()) {
+    isAbsentLocal.value = true;
+  } else {
+    isAbsentLocal.value = false;
+  }  
+})
 </script>
 
 <script lang="ts">
@@ -35,12 +43,12 @@ export async function updateModalDayEntry(entry: Entry) {
         </div>
 
         <div class="flex justify-center border-b-2 border-b-neutral-700 mb-10 text-white gap-5 mx-5">
-          <button type="button" @click="isAbsentLocal = false" :class="[isAbsentLocal ? 'al-entry-modal-tab-not-clicked' : 'al-entry-modal-tab-clicked']">
+          <button v-if="modalDayEntry.workDay < new Date()" type="button" @click="isAbsentLocal = false" :class="[isAbsentLocal ? 'al-entry-modal-tab-not-clicked' : 'al-entry-modal-tab-clicked']">
             <i class="icon pi pi-calendar-plus mr-1" style="font-size: 1rem"></i>
             Arbeitszeit
           </button>
 
-          <button type="button" @click="isAbsentLocal = true" :class="[isAbsentLocal ? 'al-entry-modal-tab-clicked' : 'al-entry-modal-tab-not-clicked']">
+          <button type="button" @click="isAbsentLocal = true" :class="[isAbsentLocal || modalDayEntry.workDay > new Date() ? 'al-entry-modal-tab-clicked' : 'al-entry-modal-tab-not-clicked']">
             <i class="icon pi pi-calendar-minus mr-1" style="font-size: 1rem"></i>
             Fehlzeit
           </button>
