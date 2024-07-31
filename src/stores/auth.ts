@@ -1,73 +1,83 @@
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
+import { defineStore } from 'pinia';
+import apiConfig from '@/config/api-config';
 
 interface User {
     id: string;
     firstname: string;
     lastname: string;
     username: string;
-    hours: number
+    hours: number;
 }
 
-export const authState = ref({
-    accessToken: '',
-    user: {
+export const useUserStore = defineStore("user", () => {
+    const accessToken: Ref<string> = ref('');
+    const user = ref({
         id: '',
         firstname: '',
         lastname: '',
         username: '',
         hours: 40
-    },
-    loginError: null
-});
-
-export function setAccessToken(accessToken: string, user: User) {
-    authState.value.accessToken = accessToken;
-    authState.value.user = user;
-}
-
-export async function storeUserData() {
-    const fetchResult = await fetch("http://localhost:3000/api/user", {
-        method: "GET",
-        credentials: "include",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
     });
+    const loginError = null;
 
-    if (!fetchResult.ok) {
-        throw "User not found";
+    function setAccessToken(token: string, userObject: User) {
+        accessToken.value = token;
+        user.value = userObject
     }
+
+    async function fetchUser() {
+        const fetchResult = await fetch(apiConfig.USER, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!fetchResult.ok) {
+            throw "User not found";
+        }
+
+        user.value = await fetchResult.json();
+    }
+
+    function isLoggedIn() {
+        return accessToken.value !== '';
+    }
+
+    async function clear() {
+        const fetchResult = await fetch(apiConfig.USER + "/logout", {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
     
-    authState.value.user = await fetchResult.json();
-}
-
-export function isLoggedIn(): Boolean {
-    return authState.value.accessToken != '';
-}
-
-export async function clearAuthData() {
-    const fetchResult = await fetch("http://localhost:3000/api/user/logout", {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
+        if (!fetchResult.ok) {
+            throw "User cannot be logged out";
         }
-    });
 
-    if (!fetchResult.ok) {
-        throw "User cannot be logged out";
+        accessToken.value = '';
+        user.value = {
+            id: '',
+            firstname: '',
+            lastname: '',
+            username: '',
+            hours: 40
+        };
     }
 
-    authState.value.accessToken = '';
-    authState.value.user = {
-        id: '',
-        firstname: '',
-        lastname: '',
-        username: '',
-        hours: 40
+    return { 
+        user, 
+        accessToken, 
+        loginError, 
+        setAccessToken, 
+        fetchUser, 
+        clear, 
+        isLoggedIn 
     };
-
-    authState.value.loginError = null;
-}
+});

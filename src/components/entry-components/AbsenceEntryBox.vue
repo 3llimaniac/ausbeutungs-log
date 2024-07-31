@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AbsenceEntry, Entry } from '@/types/day-entry'
+import type { AbsenceEntry } from '@/types/day-entry'
 
 const props = defineProps<{ entry: AbsenceEntry }>()
 

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import 'primeicons/primeicons.css'
 import { ref } from 'vue'
-import { setAccessToken } from '../../stores/auth.ts'
+import { useUserStore } from '../../stores/auth.ts'
+import apiConfig from '@/config/api-config.ts'
 const props = defineProps({ signUp: Boolean })
+
+const userStore = useUserStore()
 
 let invalidUsername = ref(false)
 let invalidUsernameMessage = ref('Bitte geben Sie einen Benutzernamen ein')
@@ -46,7 +49,7 @@ const errorMap: { [key: string]: ErrorMapEntry } = {
 }
 
 async function onSubmit() {
-  const fetchResult = await fetch('http://localhost:3000/api/user/' + (props.signUp ? 'register' : 'login'), {
+  const fetchResult = await fetch(apiConfig.USER + (props.signUp ? '/register' : '/login'), {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -59,7 +62,7 @@ async function onSubmit() {
   const fetchObject = await fetchResult.json()
 
   if (fetchResult.ok) {
-    setAccessToken(fetchObject.accessToken, fetchObject.user)
+    userStore.setAccessToken(fetchObject.accessToken, fetchObject.user)
     window.location.href = '/'
   } else {
     checkErrors(fetchObject)

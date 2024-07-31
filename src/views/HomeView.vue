@@ -3,27 +3,33 @@ import router from '@/router'
 import CalendarBar from '../components/home-components/CalendarBar.vue'
 import CalendarBox from '../components/home-components/CalendarBox.vue'
 import SideBar from '../components/home-components/SideBar.vue'
-import { storeUserData, isLoggedIn } from '@/stores/auth'
+import { useUserStore } from '@/stores/auth'
 import { onBeforeMount, ref } from 'vue'
-import { updateWeekEntries } from '@/stores/week-entries'
+import { useEntryStore } from '@/stores/week-entries'
 import WeekProgressBar from '@/components/home-components/WeekProgressBar.vue'
+import { useHolidayStore } from '@/stores/holiday'
 
 const isLoading = ref(true)
 
-if (!isLoggedIn()) {
+const userStore = useUserStore();
+const entryStore = useEntryStore();
+const holidayStore = useHolidayStore();
+
+if (!userStore.isLoggedIn()) {
   if (!document.cookie.includes('access_token')) {
     router.push('/login')
   }
 
   try {
-    storeUserData()
+    userStore.fetchUser();
   } catch (error) {
     router.push('/login')
   }
 }
 
 onBeforeMount(async () => {
-  await updateWeekEntries()
+  await entryStore.getEntries()
+  await holidayStore.getEntries()
   isLoading.value = false
 })
 </script>

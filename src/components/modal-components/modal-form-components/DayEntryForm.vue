@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { AbsenceEntry, DayEntry } from '@/types/day-entry'
-import { ref, watch, type Ref } from 'vue'
-import { isEntryCreated } from './EntryModal.vue'
-import { updateWeekEntries } from '@/stores/week-entries'
+import { computed, ref, watch, type ComputedRef, type Ref } from 'vue'
+import { useEntryStore } from '@/stores/week-entries'
+import apiConfig from '@/config/api-config';
 
 const props = defineProps<{ entry: DayEntry }>()
 const emit = defineEmits(['close'])
+
+const entryStore = useEntryStore();
+
+const isEntryCreated: ComputedRef<boolean> = computed(() => props.entry instanceof DayEntry)
 
 const inputArrival: Ref<string> = ref(props.entry.arrival)
 const inputDeparture: Ref<string> = ref(props.entry.departure)
@@ -45,7 +49,7 @@ watch(inputArrival, timeValidationFunction(true))
 async function onSubmit() {
   // delete previous entry if it exists
   if (props.entry instanceof AbsenceEntry) {
-    await fetch('http://localhost:3000/api/entry/absence', {
+    await fetch(apiConfig.ABSENCE, {
       method: 'DELETE',
       credentials: 'include',
       headers: {
@@ -65,7 +69,7 @@ async function onSubmit() {
   entry.arrival = inputArrival.value
   entry.departure = inputDeparture.value
 
-  const response = await fetch('http://localhost:3000/api/entry', {
+  const response = await fetch(apiConfig.ENTRY, {
     method: isEntryCreated.value && !(props.entry instanceof AbsenceEntry) ? 'PUT' : 'POST',
     credentials: 'include',
     headers: {
@@ -77,7 +81,7 @@ async function onSubmit() {
 
   // update UI
   if (response.ok) {
-    await updateWeekEntries()
+    await entryStore.getEntries()
     emit('close')
   } else {
     console.log(response)

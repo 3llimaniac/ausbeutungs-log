@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import { authState, clearAuthData } from '@/stores/auth'
+import { useUserStore } from '@/stores/auth'
 import router from '@/router'
-import { updateWeekNumber, updateYearNumber, weekGroup, weekNumber, yearNumber } from '@/stores/week-entries'
+import { useEntryStore } from '@/stores/week-entries'
 import { ref, type Ref } from 'vue'
 import AbsenceModal from '../modal-components/AbsenceModal.vue'
 import SettingModal from '../modal-components/SettingModal.vue'
+
+const userStore = useUserStore()
+
+const entryStore = useEntryStore()
 
 const isAbsentModalShown: Ref<boolean> = ref(false)
 
 const isSettingModalShown: Ref<boolean> = ref(false)
 
 function onLogOut() {
-  clearAuthData()
+  userStore.clear()
   router.push('/login').catch(() => (window.location.href = '/'))
 }
 </script>
@@ -33,31 +37,37 @@ function onLogOut() {
         <i class="icon pi pi-user mx-auto text-white bg-gradient-to-r border-2 from-indigo-400 via-purple-400 to-pink-400 p-4 rounded-full hover:ring-4 hover:ring-neutral-700" style="font-size: 2rem"></i>
       </button>
 
-      <div class="w-full font-bold text-xl text-center text-white mt-3">{{ authState.user.username }}</div>
+      <div class="w-full font-bold text-xl text-center text-white mt-3">{{ userStore.user.username }}</div>
     </div>
 
     <div class="select-none">
       <div class="grid grid-rows-1 grid-cols-3 gap-3 mx-10 text-center mt-24 text-white font-bold text-lg">
-        <div @click="() => updateYearNumber(yearNumber - 1)" class="flex place-content-center justify-center hover:scale-110 active:scale-90 transition-transform ease-in-out">
+        <div @click="() => entryStore.updateYearNumber(entryStore.yearNumber - 1)" class="flex place-content-center justify-center hover:scale-110 active:scale-90 transition-transform ease-in-out">
           <i class="icon pi pi-angle-left" style="font-size: 1.8rem"></i>
         </div>
 
-        <div>{{ yearNumber }}</div>
+        <div>{{ entryStore.yearNumber }}</div>
 
-        <div @click="() => updateYearNumber(yearNumber + 1)" class="flex place-content-center justify-center hover:scale-110 active:scale-90 transition-transform ease-in-out">
+        <div @click="() => entryStore.updateYearNumber(entryStore.yearNumber + 1)" class="flex place-content-center justify-center hover:scale-110 active:scale-90 transition-transform ease-in-out">
           <i class="icon pi pi-angle-right" style="font-size: 1.8rem"></i>
         </div>
       </div>
 
       <div class="grid grid-cols-4 place-items-stretch gap-2 text-white mt-3 mx-10">
-        <div @click="weekGroup = currWeekGroup" v-for="currWeekGroup in 4" :key="currWeekGroup" class="bg-neutral-800 rounded text-center p-2 border-2 hover:bg-neutral-600 active:bg-indigo-600 transition-all ease-in-out" :class="[weekGroup == currWeekGroup ? 'border-indigo-400' : 'border-neutral-600']">
+        <div @click="entryStore.weekGroup = currWeekGroup" v-for="currWeekGroup in 4" :key="currWeekGroup" class="bg-neutral-800 rounded text-center p-2 border-2 hover:bg-neutral-600 active:bg-indigo-600 transition-all ease-in-out" :class="[entryStore.weekGroup == currWeekGroup ? 'border-indigo-400' : 'border-neutral-600']">
           {{ currWeekGroup * 13 }}
         </div>
       </div>
 
       <div class="grid grid-cols-4 place-items-stretch gap-2 text-white mt-10 mx-10">
-        <div @click="() => updateWeekNumber(weekNumb + 13 * (weekGroup - 1))" v-for="weekNumb in 13" :key="weekNumb" class="bg-neutral-700 hover:bg-neutral-500 active:bg-pink-600 rounded text-center p-2 border-2 transition-all ease-in-out" :class="[weekNumber == weekNumb + 13 * (weekGroup - 1) ? 'border-pink-400' : 'border-neutral-500']">
-          {{ weekNumb + 13 * (weekGroup - 1) }}
+        <div
+          @click="() => entryStore.updateWeekNumber(weekNumb + 13 * (entryStore.weekGroup - 1))"
+          v-for="weekNumb in 13"
+          :key="weekNumb"
+          class="bg-neutral-700 hover:bg-neutral-500 active:bg-pink-600 rounded text-center p-2 border-2 transition-all ease-in-out"
+          :class="[entryStore.weekNumber == weekNumb + 13 * (entryStore.weekGroup - 1) ? 'border-pink-400' : 'border-neutral-500']"
+        >
+          {{ weekNumb + 13 * (entryStore.weekGroup - 1) }}
         </div>
       </div>
     </div>

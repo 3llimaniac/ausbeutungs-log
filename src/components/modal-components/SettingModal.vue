@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { authState } from '@/stores/auth';
+import { useUserStore } from '@/stores/auth';
 import { ref, type Ref } from 'vue';
 
 const emit = defineEmits(['close'])
-console.log('Test')
+const userStore = useUserStore();
 
-const inputWeekHours: Ref<number> = ref(authState.value.user.hours)
+const inputWeekHours: Ref<number> = ref(userStore.user.hours)
 
 async function onSubmit() {}
 </script>
@@ -16,7 +16,7 @@ async function onSubmit() {}
       <div class="w-full rounded mx-auto px-5 bg-neutral-800">
         <div class="w-full mx-auto text-center px-10 text-3xl text-white font-bold pt-10 pb-10">Einstellungen</div>
 
-        <div class="gap-5 rounded py-3 mx-10 mb-10 text-white text-center font-bold text-xl p-3 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 border-2 border-white">{{ authState.user.username }}</div>
+        <div class="gap-5 rounded py-3 mx-10 mb-10 text-white text-center font-bold text-xl p-3 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 border-2 border-white">{{ userStore.user.username }}</div>
 
         <form @submit.prevent="onSubmit" name="user-setting-form" autocomplete="off">
           <div class="mb-3 mx-auto px-10 pt-0 pb-5 gap-3 w-full text-center">

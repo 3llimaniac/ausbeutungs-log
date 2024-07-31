@@ -1,32 +1,26 @@
 <script setup lang="ts">
-import { weekEntries } from '@/stores/week-entries'
+import { useEntryStore } from '@/stores/week-entries'
 import { AbsenceEntry, DayEntry, type Entry } from '@/types/day-entry'
 import { ref, type Ref, computed, type ComputedRef, watch } from 'vue'
-import DayEntryForm from './DayEntryForm.vue'
-import AbsenceEntryForm from './AbsenceEntryForm.vue'
+import DayEntryForm from './modal-form-components/DayEntryForm.vue'
+import AbsenceEntryForm from './modal-form-components/AbsenceEntryForm.vue'
+import { createPinia, setActivePinia } from 'pinia'
+
+const entryStore = useEntryStore()
 
 // first state of isAbsent
 const props = defineProps<{ isAbsent: boolean }>()
 defineEmits(['close'])
 
-let isAbsentLocal: Ref<boolean> = ref(props.isAbsent || modalDayEntry.value.workDay > new Date());
+let isAbsentLocal: Ref<boolean> = ref(props.isAbsent || entryStore.selectedEntry.workDay > new Date())
 
 watch(isAbsentLocal, (newVal: boolean, oldVal: boolean) => {
-  if (newVal || modalDayEntry.value.workDay > new Date()) {
-    isAbsentLocal.value = true;
+  if (newVal || entryStore.selectedEntry.workDay > new Date()) {
+    isAbsentLocal.value = true
   } else {
-    isAbsentLocal.value = false;
-  }  
+    isAbsentLocal.value = false
+  }
 })
-</script>
-
-<script lang="ts">
-const modalDayEntry: Ref<Entry> = ref(weekEntries.value[0])
-export const isEntryCreated: ComputedRef<boolean> = computed(() => modalDayEntry.value instanceof DayEntry || modalDayEntry.value instanceof AbsenceEntry)
-
-export async function updateModalDayEntry(entry: Entry) {
-  modalDayEntry.value = entry
-}
 </script>
 
 <template>
@@ -38,28 +32,28 @@ export async function updateModalDayEntry(entry: Entry) {
         <div class="gap-5 rounded py-3 mx-10 mb-10 text-white text-center font-bold text-xl p-3 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 border-2 border-white">
           <div class="p">
             <i class="icon pi pi-calendar mr-1" style="font-size: 1.2rem"></i>
-            {{ modalDayEntry.workDay.toLocaleDateString('de-DE') }}
+            {{ entryStore.selectedEntry.workDay.toLocaleDateString('de-DE') }}
           </div>
         </div>
 
         <div class="flex justify-center border-b-2 border-b-neutral-700 mb-10 text-white gap-5 mx-5">
-          <button v-if="modalDayEntry.workDay < new Date()" type="button" @click="isAbsentLocal = false" :class="[isAbsentLocal ? 'al-entry-modal-tab-not-clicked' : 'al-entry-modal-tab-clicked']">
+          <button v-if="entryStore.selectedEntry.workDay < new Date()" type="button" @click="isAbsentLocal = false" :class="[isAbsentLocal ? 'al-entry-modal-tab-not-clicked' : 'al-entry-modal-tab-clicked']">
             <i class="icon pi pi-calendar-plus mr-1" style="font-size: 1rem"></i>
             Arbeitszeit
           </button>
 
-          <button type="button" @click="isAbsentLocal = true" :class="[isAbsentLocal || modalDayEntry.workDay > new Date() ? 'al-entry-modal-tab-clicked' : 'al-entry-modal-tab-not-clicked']">
+          <button type="button" @click="isAbsentLocal = true" :class="[isAbsentLocal || entryStore.selectedEntry.workDay > new Date() ? 'al-entry-modal-tab-clicked' : 'al-entry-modal-tab-not-clicked']">
             <i class="icon pi pi-calendar-minus mr-1" style="font-size: 1rem"></i>
             Fehlzeit
           </button>
         </div>
 
         <div v-if="isAbsentLocal">
-          <AbsenceEntryForm @close="$emit('close')" :entry="modalDayEntry as AbsenceEntry" />
+          <AbsenceEntryForm @close="$emit('close')" :entry="entryStore.selectedEntry as AbsenceEntry" />
         </div>
 
         <div v-else>
-          <DayEntryForm @close="$emit('close')" :entry="modalDayEntry as DayEntry" />
+          <DayEntryForm @close="$emit('close')" :entry="entryStore.selectedEntry as DayEntry" />
         </div>
       </div>
     </div>

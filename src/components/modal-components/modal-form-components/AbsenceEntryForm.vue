@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import { AbsenceEntry, DayEntry, Reason } from '@/types/day-entry'
-import { ref, type Ref } from 'vue'
-import { isEntryCreated } from './EntryModal.vue'
-import { updateWeekEntries } from '@/stores/week-entries'
+import { computed, ref, type ComputedRef, type Ref } from 'vue'
+import { useEntryStore } from '@/stores/week-entries'
+import apiConfig from '@/config/api-config';
 
 const emit = defineEmits(['close'])
 const props = defineProps<{ entry: AbsenceEntry }>()
 const currSelection: Ref<Reason> = ref(props.entry.reason || Reason.Krankheit)
 
-console.log(props.entry instanceof AbsenceEntry)
-console.log(props.entry instanceof DayEntry)
+const entryStore = useEntryStore()
+
+const isEntryCreated: ComputedRef<boolean> = computed(() => props.entry instanceof DayEntry || props.entry instanceof AbsenceEntry)
 
 async function onSubmit() {
   // delete previous entry if it exists
   if (props.entry instanceof DayEntry) {
-    await fetch('http://localhost:3000/api/entry', {
+    await fetch(apiConfig.ENTRY, {
       method: 'DELETE',
       credentials: 'include',
       headers: {
@@ -32,7 +33,7 @@ async function onSubmit() {
 
   entry.reason = currSelection.value as Reason
 
-  const response = await fetch('http://localhost:3000/api/entry/absence', {
+  const response = await fetch(apiConfig.ABSENCE, {
     method: isEntryCreated.value && !(props.entry instanceof DayEntry) ? 'PUT' : 'POST',
     credentials: 'include',
     headers: {
@@ -43,7 +44,7 @@ async function onSubmit() {
   })
 
   if (response.ok) {
-    await updateWeekEntries()
+    await entryStore.getEntries()
     emit('close')
   } else {
     console.log(response)

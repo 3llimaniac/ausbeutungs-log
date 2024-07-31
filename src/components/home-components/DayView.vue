@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { weekEntries } from '@/stores/week-entries'
-import type { Entry } from '@/types/day-entry'
-
 const currentDay: Date = new Date()
 </script>
 

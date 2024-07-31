@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { updateWeekEntries } from '@/stores/week-entries'
+import apiConfig from '@/config/api-config';
+import { useEntryStore } from '@/stores/week-entries'
 import { Reason } from '@/types/day-entry'
 import { ref, type Ref } from 'vue'
 
 const emit = defineEmits(['close'])
+
+const entryStore = useEntryStore()
 
 const currSelection: Ref<Reason> = ref(Reason.Krankheit)
 const inputBeginning: Ref<string> = ref(new Date().toISOString().split('T')[0])
 const inputEnding: Ref<string> = ref(new Date(Date.now() + 86400000).toISOString().split('T')[0]) // +1 day
 
 async function onSubmit() {
-  const response = await fetch('http://localhost:3000/api/entry/absences', {
+  const response = await fetch(apiConfig.ABSENCES, {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -25,7 +28,7 @@ async function onSubmit() {
   })
 
   if (response) {
-    await updateWeekEntries()
+    await entryStore.getEntries()
     emit('close')
   }
 }
