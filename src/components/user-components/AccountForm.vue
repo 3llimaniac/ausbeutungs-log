@@ -3,8 +3,9 @@ import 'primeicons/primeicons.css'
 import { ref } from 'vue'
 import { useUserStore } from '../../stores/auth.ts'
 import apiConfig from '@/config/api-config.ts'
-const props = defineProps({ signUp: Boolean })
+import { ArrowRightEndOnRectangleIcon, UserPlusIcon } from '@heroicons/vue/24/solid'
 
+const props = defineProps({ signUp: Boolean })
 const userStore = useUserStore()
 
 let invalidUsername = ref(false)
@@ -142,9 +143,10 @@ async function checkErrors(fetchObject: ErrorObject) {
 
     <!-- Buttons -->
     <div class="w-full mb-3 flex align-center justify-center drop-shadow-md">
-      <button class="al-submit" type="submit">
-        <i v-if="!signUp" class="icon pi pi-sign-in mr-2" style="font-size: 1rem"></i>
-        <i v-else class="icon pi pi-user-plus mr-2" style="font-size: 1rem"></i>
+      <button class="al-submit flex justify-center items-center gap-2" type="submit">
+        <ArrowRightEndOnRectangleIcon v-if="!signUp" class="al-icon-button" />
+        <UserPlusIcon v-else class="al-icon-button" />
+        <!-- <i v-else class="icon pi pi-user-plus mr-2" style="font-size: 1rem"></i> -->
         {{ signUp ? 'Konto erstellen' : 'Login' }}
       </button>
     </div>

@@ -4,7 +4,7 @@ import { AbsenceEntry, DayEntry, type Entry } from '@/types/day-entry'
 import { ref, type Ref, computed, type ComputedRef, watch } from 'vue'
 import DayEntryForm from './modal-form-components/DayEntryForm.vue'
 import AbsenceEntryForm from './modal-form-components/AbsenceEntryForm.vue'
-import { createPinia, setActivePinia } from 'pinia'
+import { CalendarIcon, BriefcaseIcon, HomeIcon } from '@heroicons/vue/24/solid'
 
 const entryStore = useEntryStore()
 
@@ -29,21 +29,21 @@ watch(isAbsentLocal, (newVal: boolean, oldVal: boolean) => {
       <div class="w-full rounded mx-auto px-5 bg-neutral-800">
         <div class="w-full mx-auto text-center px-10 text-3xl text-white font-bold pt-10 pb-10">Tageseintrag</div>
 
-        <div class="gap-5 rounded py-3 mx-10 mb-10 text-white text-center font-bold text-xl p-3 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 border-2 border-white">
-          <div class="p">
-            <i class="icon pi pi-calendar mr-1" style="font-size: 1.2rem"></i>
-            {{ entryStore.selectedEntry.workDay.toLocaleDateString('de-DE') }}
+        <div class="gap-5 rounded py-3 mx-10 mb-10 text-white text-center font-bold text-xl bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 border-2 border-white">
+          <div class="flex justify-center items-center gap-3">
+             <CalendarIcon class="al-icon-button" />
+            <span>{{ entryStore.selectedEntry.workDay.toLocaleDateString('de-DE') }}</span>
           </div>
         </div>
 
-        <div class="flex justify-center border-b-2 border-b-neutral-700 mb-10 text-white gap-5 mx-5">
-          <button v-if="entryStore.selectedEntry.workDay < new Date()" type="button" @click="isAbsentLocal = false" :class="[isAbsentLocal ? 'al-entry-modal-tab-not-clicked' : 'al-entry-modal-tab-clicked']">
-            <i class="icon pi pi-calendar-plus mr-1" style="font-size: 1rem"></i>
-            Arbeitszeit
+        <div class="flex justify-center items-center border-b-2 border-b-neutral-700 mb-10 text-white gap-5 mx-5">
+          <button class="flex justify-center items-center gap-2" v-if="entryStore.selectedEntry.workDay < new Date()" type="button" @click="isAbsentLocal = false" :class="[isAbsentLocal ? 'al-entry-modal-tab-not-clicked' : 'al-entry-modal-tab-clicked']">
+            <BriefcaseIcon class="al-icon-button" />
+            <span>Arbeitszeit</span>
           </button>
 
-          <button type="button" @click="isAbsentLocal = true" :class="[isAbsentLocal || entryStore.selectedEntry.workDay > new Date() ? 'al-entry-modal-tab-clicked' : 'al-entry-modal-tab-not-clicked']">
-            <i class="icon pi pi-calendar-minus mr-1" style="font-size: 1rem"></i>
+          <button class="flex justify-center items-center gap-2" @click="isAbsentLocal = true" :class="[isAbsentLocal || entryStore.selectedEntry.workDay > new Date() ? 'al-entry-modal-tab-clicked' : 'al-entry-modal-tab-not-clicked']">
+            <HomeIcon class="al-icon-button" />
             Fehlzeit
           </button>
         </div>

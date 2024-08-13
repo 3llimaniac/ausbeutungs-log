@@ -28,6 +28,18 @@
   .al-icon {
     @apply flex p-3 place-content-center rounded text-neutral-500 bg-neutral-800 border-2 border-neutral-700 hover:text-neutral-400 hover:bg-neutral-700 active:scale-95 transition ease-in-out;
   }
+
+  .al-icon-entry {
+    @apply size-8 w-full
+  }
+
+  .al-icon-button {
+    @apply size-5
+  }
+
+  .al-icon-bar {
+    @apply size-8
+  }
 }
 
 *:focus {

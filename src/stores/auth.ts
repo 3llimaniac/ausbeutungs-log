@@ -4,9 +4,8 @@ import apiConfig from '@/config/api-config';
 
 interface User {
     id: string;
-    firstname: string;
-    lastname: string;
     username: string;
+    password: string;
     hours: number;
 }
 
@@ -14,9 +13,8 @@ export const useUserStore = defineStore("user", () => {
     const accessToken: Ref<string> = ref('');
     const user = ref({
         id: '',
-        firstname: '',
-        lastname: '',
         username: '',
+        password: '',
         hours: 40
     });
     const loginError = null;
@@ -64,9 +62,8 @@ export const useUserStore = defineStore("user", () => {
         accessToken.value = '';
         user.value = {
             id: '',
-            firstname: '',
-            lastname: '',
             username: '',
+            password: '',
             hours: 40
         };
     }

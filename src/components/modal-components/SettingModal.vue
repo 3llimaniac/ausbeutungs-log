@@ -1,13 +1,36 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/auth';
-import { ref, type Ref } from 'vue';
+import apiConfig from '@/config/api-config'
+import { useUserStore } from '@/stores/auth'
+import { useEntryStore } from '@/stores/week-entries';
+import { ref, type Ref } from 'vue'
 
 const emit = defineEmits(['close'])
-const userStore = useUserStore();
-
+const userStore = useUserStore()
+const entryStore = useEntryStore()
 const inputWeekHours: Ref<number> = ref(userStore.user.hours)
 
-async function onSubmit() {}
+async function onSubmit() {
+  const fetchResult = await fetch(apiConfig.USER, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      username: userStore.user.username,
+      weekHours: inputWeekHours.value
+    })
+  })
+
+  const fetchObject = await fetchResult.json()
+
+  if (fetchResult.ok) {
+    userStore.setAccessToken(fetchObject.accessToken, fetchObject.user);
+    await entryStore.getEntries();
+    emit("close");
+  } 
+}
 </script>
 
 <template>
@@ -21,12 +44,11 @@ async function onSubmit() {}
         <form @submit.prevent="onSubmit" name="user-setting-form" autocomplete="off">
           <div class="mb-3 mx-auto px-10 pt-0 pb-5 gap-3 w-full text-center">
             <div class="text-center text-white mb-3">Anzahl der Wochenstunden</div>
-            <input type="number" v-model="inputWeekHours" class="al-login-input text-center" />
+            <input type="number" min="0" max="100" v-model="inputWeekHours" class="al-login-input text-center" />
           </div>
 
           <div class="w-full mb-3 flex align-center justify-center drop-shadow-md">
             <button class="al-submit" type="submit">
-              <i class="icon pi pi-save mr-1" style="font-size: 1rem"></i>
               Speichern
             </button>
           </div>

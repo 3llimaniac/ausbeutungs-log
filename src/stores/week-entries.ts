@@ -6,27 +6,7 @@ import { defineStore, setActivePinia } from "pinia";
 import apiConfig from "@/config/api-config";
 import { useHolidayStore } from "./holiday";
 import pinia from "./pinia";
-
-declare global {
-    interface Date {
-        getWeek(): number;
-
-        addDays(days: number): Date;
-    }
-}
-
-Date.prototype.getWeek = function (): number {
-    const onejan = new Date(this.getFullYear(), 0, 1);
-    const today = new Date(this.getFullYear(), this.getMonth(), this.getDate());
-    const dayOfYear = ((today.getTime() - onejan.getTime() + 86400000) / 86400000);
-    return Math.ceil(dayOfYear / 7) - 1;
-};
-
-Date.prototype.addDays = function (days: number) {
-    const date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-};
+import '../utilities/date-extensions';
 
 const initialWeekEntriesObject = {
     0: {} as Entry,
@@ -183,13 +163,20 @@ export const useEntryStore = defineStore("entry", () => {
         }
 
         const statObj: UserStats = await fetchResult.json();
-        statObj.sumSeconds = Number(statObj.sumSeconds);
+
+        // amount of worked seconds
+        statObj.sumSeconds = Number(statObj.sumSeconds || 0);
+        console.log(statObj.sumSeconds);
+
         const currDate: Date = new Date();
 
+        // amount of worked hours
         const workedHours: number = Math.ceil(statObj.sumSeconds / 3600);
-        let workingWeeks: number = currDate.getWeek() - statObj.minWeek + 1;
 
-        if (currDate.getFullYear() !== statObj.minYear) {
+        // amount of weeks to be worked
+        let workingWeeks: number = statObj.minWeek ? currDate.getWeek() - statObj.minWeek + 1 : 1;
+
+        if (statObj.minYear && currDate.getFullYear() !== statObj.minYear) {
             workingWeeks += 52;
         }
 

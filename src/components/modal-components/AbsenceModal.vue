@@ -2,6 +2,7 @@
 import apiConfig from '@/config/api-config';
 import { useEntryStore } from '@/stores/week-entries'
 import { Reason } from '@/types/day-entry'
+import { HomeIcon } from '@heroicons/vue/24/solid';
 import { ref, type Ref } from 'vue'
 
 const emit = defineEmits(['close'])
@@ -40,7 +41,10 @@ async function onSubmit() {
       <div class="w-full rounded mx-auto px-5 bg-neutral-800">
         <div class="w-full mx-auto text-center px-10 text-3xl text-white font-bold pt-10 pb-10">Fehltage eintragen</div>
 
-        <div class="gap-5 rounded py-3 mx-10 mb-10 text-white text-center font-bold text-xl p-3 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 border-2 border-white">{{ new Date(inputBeginning).toLocaleDateString('de-DE') }}...{{ new Date(inputEnding).toLocaleDateString('de-DE') }}</div>
+        <div class="flex justify-center items-center gap-5 rounded py-3 mx-10 mb-10 text-white text-center font-bold text-xl p-3 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 border-2 border-white">
+          <HomeIcon class="size-5"></HomeIcon>
+          <span>{{ new Date(inputBeginning).toLocaleDateString('de-DE') }}...{{ new Date(inputEnding).toLocaleDateString('de-DE') }}</span>
+        </div>
 
         <form @submit.prevent="onSubmit" name="multiple-absences-form" autocomplete="off">
           <div class="mb-3 mx-auto px-10 pb-5 pt-0 gap-3 w-full">
@@ -66,7 +70,6 @@ async function onSubmit() {
 
           <div class="w-full mb-3 flex align-center justify-center drop-shadow-md">
             <button class="al-submit" type="submit">
-              <i class="icon pi pi-save mr-1" style="font-size: 1rem"></i>
               Speichern
             </button>
           </div>

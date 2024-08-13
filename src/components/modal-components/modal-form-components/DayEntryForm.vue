@@ -103,7 +103,6 @@ async function onSubmit() {
 
     <div class="w-full mb-3 flex align-center justify-center drop-shadow-md">
       <button class="al-submit" type="submit">
-        <i class="icon pi pi-save mr-1" style="font-size: 1rem"></i>
         {{ isEntryCreated ? 'Speichern' : 'Erstellen' }}
       </button>
     </div>

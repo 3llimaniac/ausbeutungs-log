@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { AbsenceEntry } from '@/types/day-entry'
+import { PencilSquareIcon } from '@heroicons/vue/24/solid';
+import { NoSymbolIcon } from '@heroicons/vue/24/solid';
 
 const props = defineProps<{ entry: AbsenceEntry }>()
 
@@ -15,7 +17,7 @@ defineEmits(['showEntryModal'])
 
       <div class="flex justify-center place-items-center text-center mx-auto w-full h-3/4 text-neutral-400">
         <div class="grid grid-rows-2 gap-3">
-          <i class="pi pi-ban" style="font-size: 1.5rem"></i>
+          <NoSymbolIcon class="al-icon-entry" />
           {{ props.entry.reason }}
         </div>
       </div>
@@ -23,7 +25,7 @@ defineEmits(['showEntryModal'])
 
     <div class="flex flex-col justify-end place-content-end align-bottom place-items-center rounded bg-neutral-800 w-full mb-5">
       <div @click="$emit('showEntryModal')" class="al-icon">
-        <i class="pi pi-pencil" style="font-size: 1rem"></i>
+        <PencilSquareIcon class="al-icon-button" />
       </div>
     </div>
   </div>
