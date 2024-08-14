@@ -83,8 +83,16 @@ export const useEntryStore = defineStore("entry", () => {
         const initialWeekEntries: Record<number, Entry> = structuredClone(initialWeekEntriesObject);
         const currentDate = new Date();
 
+        // add days
         let initialDate = currentDate.addDays(-(currentDate.getDay() - 1));
+        
+        // set year
+        initialDate.setFullYear(yearNumber.value)
+
+        // add weeks
         initialDate = initialDate.addDays((weekNumber.value - initialDate.getWeek()) * 7);
+
+        console.log(initialDate);
 
         for (let index: number = 0; index < 5; index++) {
             initialWeekEntries[index].workDay = initialDate;
@@ -166,7 +174,6 @@ export const useEntryStore = defineStore("entry", () => {
 
         // amount of worked seconds
         statObj.sumSeconds = Number(statObj.sumSeconds || 0);
-        console.log(statObj.sumSeconds);
 
         const currDate: Date = new Date();
 

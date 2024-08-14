@@ -15,9 +15,9 @@ defineEmits(['showEntryModal'])
         {{ props.entry.workDay.toLocaleDateString('de-DE') }}
       </div>
 
-      <div class="flex justify-center place-items-center text-center mx-auto w-full h-3/4 text-neutral-400">
+      <div class="flex justify-center place-items-center text-center mx-auto w-full h-3/4 text-white">
         <div class="grid grid-rows-2 gap-3">
-          <NoSymbolIcon class="al-icon-entry" />
+          <NoSymbolIcon class="al-icon-entry text-purple-400" />
           {{ props.entry.reason }}
         </div>
       </div>

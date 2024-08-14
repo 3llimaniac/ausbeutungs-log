@@ -32,8 +32,8 @@ export const useHolidayStore = defineStore("holiday", () => {
         return holidays.value[day.toLocaleDateString()];
     }
 
-    async function getEntries() {
-        const fetchResult = await fetch(apiConfig.HOLIDAY, {
+    async function getEntries(year: number) {
+        const fetchResult = await fetch(apiConfig.HOLIDAY + year, {
             method: 'GET',
             credentials: 'omit',
             headers: {

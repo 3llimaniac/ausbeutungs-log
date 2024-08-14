@@ -1,5 +1,5 @@
 const API_BASE_ENTRY_URL: string = "http://localhost:3000/api";
-const API_HOLIDAY_URL: string = "https://get.api-feiertage.de/?years=2024&states=by";
+const API_HOLIDAY_URL: string = "https://get.api-feiertage.de/?states=by&years=";
 
 interface ApiConfig {
     USER: string
