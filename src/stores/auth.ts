@@ -11,12 +11,14 @@ interface User {
 
 export const useUserStore = defineStore("user", () => {
     const accessToken: Ref<string> = ref('');
+    
     const user = ref({
         id: '',
         username: '',
         password: '',
         hours: 40
     });
+    
     const loginError = null;
 
     function setAccessToken(token: string, userObject: User) {

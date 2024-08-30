@@ -4,7 +4,6 @@ import 'primeicons/primeicons.css'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 
 const entryStore = useEntryStore()
-
 </script>
 
 <template>

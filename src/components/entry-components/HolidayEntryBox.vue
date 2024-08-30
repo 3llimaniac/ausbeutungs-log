@@ -6,7 +6,7 @@ const props = defineProps<{ holidayEntry: HolidayEntry }>()
 </script>
 
 <template>
-  <div class="flex flex-col place-content-center place-items-center rounded bg-neutral-800 text-neutral-400 text-xl font-bold transition-all ease-in-out p-10 px-5 select-none">
+  <div class="flex flex-col place-content-center place-items-center rounded bg-gray-800 text-neutral-400 text-xl font-bold transition-all ease-in-out p-10 px-5 select-none">
     <div class="w-full h-full">
       <div class="flex justify-center place-items-center mx-5 mb-5 text-center">{{ props.holidayEntry.date.toLocaleDateString('de-DE') }}</div>
 

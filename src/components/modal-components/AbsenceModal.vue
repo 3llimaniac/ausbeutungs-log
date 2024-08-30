@@ -1,17 +1,35 @@
 <script setup lang="ts">
-import apiConfig from '@/config/api-config';
+import apiConfig from '@/config/api-config'
 import { useEntryStore } from '@/stores/week-entries'
 import { Reason } from '@/types/day-entry'
-import { HomeIcon } from '@heroicons/vue/24/solid';
-import { ref, type Ref } from 'vue'
+import { ArrowLongRightIcon, MinusIcon } from '@heroicons/vue/24/solid'
+import { computed, ref, watch, type ComputedRef, type Ref } from 'vue'
+import ModalBase from './ModalBase.vue'
 
 const emit = defineEmits(['close'])
 
 const entryStore = useEntryStore()
 
+const currentDate = new Date()
+
+// general ref variables
 const currSelection: Ref<Reason> = ref(Reason.Krankheit)
-const inputBeginning: Ref<string> = ref(new Date().toISOString().split('T')[0])
-const inputEnding: Ref<string> = ref(new Date(Date.now() + 86400000).toISOString().split('T')[0]) // +1 day
+const inputBeginning: Ref<string> = ref(currentDate.toISOString().split('T')[0])
+const inputEnding: Ref<string> = ref(new Date(currentDate.getTime() + 86400000).toISOString().split('T')[0]) // +1 day
+
+// computed ref variables
+const dateBeginning: ComputedRef<Date> = computed(() => new Date(inputBeginning.value))
+const dateEnding: ComputedRef<Date> = computed(() => new Date(inputEnding.value))
+const dateDifference: ComputedRef<number> = computed(() => (dateEnding.value.getTime() - dateBeginning.value.getTime()) / (1000 * 60 * 60 * 24))
+
+// checks whether the difference between the dates is positive
+watch(inputEnding, (newVal: string, oldVal: string) => {
+  if (dateDifference.value > 0) {
+    inputEnding.value = newVal
+  } else {
+    inputEnding.value = oldVal
+  }
+})
 
 async function onSubmit() {
   const response = await fetch(apiConfig.ABSENCES, {
@@ -36,45 +54,42 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div @click="$emit('close')" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-90" style="z-index: 9999">
-    <div @click.stop class="flex flex-col rounded-lg max-h-screen w-full max-w-3xl mx-auto items-center justify-center bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 p-3 overflow-y-auto">
-      <div class="w-full rounded mx-auto px-5 bg-neutral-800">
-        <div class="w-full mx-auto text-center px-10 text-3xl text-white font-bold pt-10 pb-10">Fehltage eintragen</div>
-
-        <div class="flex justify-center items-center gap-5 rounded py-3 mx-10 mb-10 text-white text-center font-bold text-xl p-3 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 border-2 border-white">
-          <HomeIcon class="size-5"></HomeIcon>
-          <span>{{ new Date(inputBeginning).toLocaleDateString('de-DE') }}...{{ new Date(inputEnding).toLocaleDateString('de-DE') }}</span>
-        </div>
-
-        <form @submit.prevent="onSubmit" name="multiple-absences-form" autocomplete="off">
-          <div class="mb-3 mx-auto px-10 pb-5 pt-0 gap-3 w-full">
-            <div class="text-center text-white mb-3">Grund</div>
-
-            <select class="al-login-input text-center" v-model="currSelection">
-              <option value="Krankheit">Krankheit</option>
-              <option value="Urlaub">Urlaub</option>
-              <option value="Termin">Termin</option>
-              <option value="Sonstiges">Sonstiges</option>
-            </select>
-          </div>
-
-          <div class="mb-3 mx-auto px-10 pt-0 pb-5 gap-3 w-full text-center">
-            <div class="text-center text-white mb-3">Beginn</div>
-            <input type="date" v-model="inputBeginning" class="al-login-input text-center" />
-          </div>
-
-          <div class="mb-5 mx-auto px-10 pt-0 gap-3 w-full">
-            <div class="text-center text-white mb-3">Ende</div>
-            <input type="date" v-model="inputEnding" class="al-login-input text-center" />
-          </div>
-
-          <div class="w-full mb-3 flex align-center justify-center drop-shadow-md">
-            <button class="al-submit" type="submit">
-              Speichern
-            </button>
-          </div>
-        </form>
-      </div>
+  <ModalBase modalTitle="Fehltrage eintragen" @close="$emit('close')">
+    <div
+      class="flex justify-center items-center gap-3 rounded mx-10 my-10 text-white text-center font-bold text-xl p-3 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 border-2 border-white"
+    >
+      <span>{{ dateBeginning.toLocaleDateString('de-DE') }}</span>
+      <MinusIcon class="size-6" />
+      <span>{{ dateDifference }} {{ dateDifference > 1 ? 'Tage' : 'Tag' }}</span>
+      <ArrowLongRightIcon class="size-6" />
+      <span>{{ dateEnding.toLocaleDateString('de-DE') }}</span>
     </div>
-  </div>
+
+    <form @submit.prevent="onSubmit" name="multiple-absences-form" autocomplete="off">
+      <div class="mb-3 mx-auto px-10 pb-5 pt-0 gap-3 w-full">
+        <div class="text-center text-white mb-3">Grund</div>
+
+        <select class="al-login-input text-center" v-model="currSelection">
+          <option value="Krankheit">Krankheit</option>
+          <option value="Urlaub">Urlaub</option>
+          <option value="Termin">Termin</option>
+          <option value="Sonstiges">Sonstiges</option>
+        </select>
+      </div>
+
+      <div class="mb-3 mx-auto px-10 pt-0 pb-5 gap-3 w-full text-center">
+        <div class="text-center text-white mb-3">Beginn</div>
+        <input type="date" v-model="inputBeginning" class="al-login-input text-center" />
+      </div>
+
+      <div class="mb-5 mx-auto px-10 pt-0 gap-3 w-full">
+        <div class="text-center text-white mb-3">Ende</div>
+        <input type="date" v-model="inputEnding" class="al-login-input text-center" />
+      </div>
+
+      <div class="w-full mb-3 flex align-center justify-center drop-shadow-md">
+        <button class="al-submit" type="submit">Speichern</button>
+      </div>
+    </form>
+  </ModalBase>
 </template>

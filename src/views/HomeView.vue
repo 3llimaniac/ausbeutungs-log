@@ -28,8 +28,8 @@ if (!userStore.isLoggedIn()) {
 }
 
 onBeforeMount(async () => {
-  await entryStore.getEntries()
   await holidayStore.getEntries(entryStore.yearNumber)
+  await entryStore.getEntries()
   isLoading.value = false
 })
 </script>

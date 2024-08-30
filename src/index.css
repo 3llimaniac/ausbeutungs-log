@@ -8,8 +8,16 @@
     @apply rounded-md border-b-2 text-base text-center text-white placeholder-gray-300 bg-neutral-500 border-neutral-500 w-full p-3 focus:border-gray-300;
   }
 
+  .al-login-input-disabled {
+    @apply bg-neutral-700 border-neutral-700
+  }
+
   .al-submit {
     @apply rounded text-white m-5 p-3 text-center bg-gradient-to-t from-purple-600 to-purple-500 hover:bg-gradient-to-b border-2 border-purple-400 transition-all ease-in-out;
+  }
+
+  .al-submit-disabled {
+    @apply rounded text-neutral-400 hover:bg-gradient-to-t
   }
 
   .al-box-bubble {

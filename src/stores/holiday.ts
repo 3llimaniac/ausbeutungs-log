@@ -2,6 +2,8 @@ import apiConfig from "@/config/api-config";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
+import '../utilities/date-extensions';
+
 interface HolidayType {
     date: string,
     fname: string;
@@ -32,6 +34,27 @@ export const useHolidayStore = defineStore("holiday", () => {
         return holidays.value[day.toLocaleDateString()];
     }
 
+    function getPreviousHolidays(minWeek: number) {
+        const holidayList: HolidayEntry[] = [];
+        const currentDay = new Date();
+
+        for (const key in holidays.value) {
+            const entry = holidays.value[key];
+
+            if (entry.date.getWeek() < minWeek) {
+                continue;
+            }
+
+            if (entry.date.getWeek() > currentDay.getWeek() || (entry.date.getWeek() === currentDay.getWeek() && currentDay.getDay() < entry.date.getDay())) {
+                break;
+            } else {
+                holidayList.push(holidays.value[key]);
+            }
+        }
+
+        return holidayList;
+    }
+
     async function getEntries(year: number) {
         const fetchResult = await fetch(apiConfig.HOLIDAY + year, {
             method: 'GET',
@@ -54,5 +77,11 @@ export const useHolidayStore = defineStore("holiday", () => {
         }
     }
 
-    return { holidays, getEntries, isHoliday, getHoliday };
+    return {
+        holidays,
+        getEntries,
+        getPreviousHolidays,
+        isHoliday,
+        getHoliday
+    };
 });

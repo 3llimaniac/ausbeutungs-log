@@ -83,8 +83,6 @@ async function onSubmit() {
   if (response.ok) {
     await entryStore.getEntries()
     emit('close')
-  } else {
-    console.log(response)
   }
 }
 </script>

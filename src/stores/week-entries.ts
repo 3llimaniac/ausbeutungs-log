@@ -92,8 +92,6 @@ export const useEntryStore = defineStore("entry", () => {
         // add weeks
         initialDate = initialDate.addDays((weekNumber.value - initialDate.getWeek()) * 7);
 
-        console.log(initialDate);
-
         for (let index: number = 0; index < 5; index++) {
             initialWeekEntries[index].workDay = initialDate;
             initialDate = initialDate.addDays(1);
@@ -181,13 +179,17 @@ export const useEntryStore = defineStore("entry", () => {
         const workedHours: number = Math.ceil(statObj.sumSeconds / 3600);
 
         // amount of weeks to be worked
-        let workingWeeks: number = statObj.minWeek ? currDate.getWeek() - statObj.minWeek + 1 : 1;
+        let weeksToBeWorked: number = statObj.minWeek ? currDate.getWeek() - statObj.minWeek + 1 : 1;
 
         if (statObj.minYear && currDate.getFullYear() !== statObj.minYear) {
-            workingWeeks += 52;
+            weeksToBeWorked += 52;
         }
 
-        const hoursToBeWorked: number = (workingWeeks * 5 - (statObj.countAbsences + 5 - currDate.getDay())) * (userStore.user.hours / 5);
+        // amount of days to be worked
+        let daysToBeWorked: number = (weeksToBeWorked * 5 - (statObj.countAbsences + 5 - currDate.getDay()))
+        daysToBeWorked -= holidayStore.getPreviousHolidays(statObj.minWeek).length;
+
+        const hoursToBeWorked: number = daysToBeWorked * (userStore.user.hours / 5);
         overtimeHours.value = workedHours - hoursToBeWorked;
     }
 
